@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David's English Championship</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Nunito',sans-serif; background:#f0fdf4; color:#0f172a; min-height:100vh; }
+
+/* HEADER */
+header { background:linear-gradient(135deg,#16a34a,#0284c7); padding:14px 18px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; box-shadow:0 2px 10px rgba(0,0,0,.15); }
+.htitle { font-family:'Fredoka One',cursive; color:#fff; font-size:1.4rem; }
+.hsub { color:rgba(255,255,255,.85); font-size:.72rem; font-weight:700; }
+.hbadges { display:flex; gap:8px; }
+.hbadge { background:rgba(255,255,255,.25); border-radius:50px; padding:5px 12px; color:#fff; font-weight:800; font-size:.85rem; }
+
+/* NAV */
+nav { display:flex; background:#fff; border-bottom:2px solid #e2e8f0; overflow-x:auto; }
+nav::-webkit-scrollbar { display:none; }
+nav button { border:none; background:none; cursor:pointer; padding:12px 16px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.82rem; color:#64748b; white-space:nowrap; border-bottom:3px solid transparent; }
+nav button.on { color:#16a34a; border-bottom-color:#16a34a; }
+
+/* MAIN */
+main { max-width:820px; margin:0 auto; padding:16px 12px 40px; }
+
+/* PAGES */
+.pg { display:none; }
+.pg.on { display:block; }
+
+/* CARDS */
+.card { background:#fff; border-radius:16px; padding:18px; margin-bottom:14px; border:1.5px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.card h2 { font-family:'Fredoka One',cursive; font-size:1.25rem; margin-bottom:5px; }
+.card p { color:#64748b; font-size:.88rem; line-height:1.5; }
+
+/* HERO */
+.hero { border-radius:18px; padding:20px; margin-bottom:14px; background:linear-gradient(135deg,#ecfdf5,#eff6ff); border:2px solid #bbf7d0; position:relative; overflow:hidden; }
+.hero::after { content:'🎾🏎️'; position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:2.5rem; opacity:.15; }
+.hero h2 { font-family:'Fredoka One',cursive; font-size:1.5rem; }
+
+/* QUOTE CARD */
+.qcard { background:linear-gradient(135deg,#fffbeb,#fef3c7); border-radius:16px; padding:16px 18px; margin-bottom:14px; border:2px solid #fde68a; }
+.qtext { font-style:italic; font-weight:700; color:#92400e; font-size:.92rem; line-height:1.5; margin-bottom:5px; }
+.qwho { font-size:.75rem; font-weight:800; color:#d97706; }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:14px; }
+.stat { background:#fff; border-radius:14px; padding:12px; text-align:center; border:1.5px solid #e2e8f0; }
+.stat-num { font-family:'Fredoka One',cursive; font-size:1.8rem; }
+.stat-lbl { font-size:.68rem; color:#64748b; font-weight:700; }
+.green { color:#16a34a; } .blue { color:#0284c7; } .gold { color:#d97706; }
+
+/* COURT */
+.court { background:linear-gradient(135deg,#166534,#15803d); border-radius:14px; padding:16px; border:3px solid #14532d; margin-bottom:10px; position:relative; overflow:hidden; }
+.court::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:2px; background:rgba(255,255,255,.15); }
+.ctrack { background:rgba(0,0,0,.3); border-radius:50px; height:28px; overflow:hidden; position:relative; z-index:1; }
+.cbar { height:100%; background:linear-gradient(90deg,#fbbf24,#84cc16,#22c55e); border-radius:50px; min-width:28px; display:flex; align-items:center; justify-content:flex-end; padding-right:4px; transition:width 1s; }
+.cbar::after { content:'🎾'; font-size:1rem; }
+.clbls { display:flex; justify-content:space-between; margin-top:6px; font-size:.72rem; font-weight:800; color:rgba(255,255,255,.8); }
+
+/* MILESTONES */
+.ms { display:flex; justify-content:space-between; align-items:center; position:relative; margin-top:12px; }
+.ms::before { content:''; position:absolute; top:50%; left:5%; right:5%; height:3px; background:#e2e8f0; transform:translateY(-50%); }
+.mitem { display:flex; flex-direction:column; align-items:center; gap:3px; z-index:1; }
+.mdot { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:800; border:3px solid #e2e8f0; background:#fff; color:#64748b; }
+.mdot.done { background:#16a34a; border-color:#16a34a; color:#fff; }
+.mdot.now { background:#0284c7; border-color:#0284c7; color:#fff; }
+.mlbl { font-size:.6rem; font-weight:800; color:#64748b; }
+
+/* TIMER */
+.tzone { display:flex; flex-direction:column; align-items:center; padding:8px 0 14px; }
+.tring { position:relative; width:140px; height:140px; }
+.tring svg { transform:rotate(-90deg); }
+.tring .trk { fill:none; stroke:#e2e8f0; stroke-width:10; }
+.tring .tfil { fill:none; stroke:#16a34a; stroke-width:10; stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:377; transition:stroke-dashoffset .5s, stroke .3s; }
+.tctr { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.tnum { font-family:'Fredoka One',cursive; font-size:1.8rem; line-height:1; }
+.tsub { font-size:.6rem; color:#64748b; font-weight:700; }
+.tmsg { font-weight:700; font-size:.85rem; color:#64748b; margin-top:8px; text-align:center; }
+
+/* ACTIVITY BUTTONS */
+.agrid { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px; }
+.abtn { border:none; cursor:pointer; border-radius:14px; padding:14px 10px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.88rem; color:#fff; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.abtn span { font-size:1.5rem; }
+.a1 { background:linear-gradient(135deg,#16a34a,#0284c7); }
+.a2 { background:linear-gradient(135deg,#7c3aed,#db2777); }
+.a3 { background:linear-gradient(135deg,#d97706,#ea580c); }
+.a4 { background:linear-gradient(135deg,#0284c7,#7c3aed); }
+
+/* BUTTONS */
+.btn { border:none; cursor:pointer; border-radius:50px; padding:11px 24px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.9rem; display:inline-flex; align-items:center; gap:6px; }
+.btn-g { background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; }
+.btn-b { background:linear-gradient(135deg,#0284c7,#7c3aed); color:#fff; }
+.btn-o { background:linear-gradient(135deg,#d97706,#ea580c); color:#fff; }
+.btn-m { background:#f1f5f9; color:#64748b; border:1.5px solid #e2e8f0; }
+.btnrow { display:flex; justify-content:center; gap:9px; flex-wrap:wrap; margin-top:12px; }
+
+/* TEST */
+.qbox { background:#fff; border-radius:16px; padding:18px; border:1.5px solid #e2e8f0; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,.05); }
+.qtxt { font-weight:700; font-size:.95rem; margin-bottom:11px; line-height:1.5; }
+.opts { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.opt { border:2px solid #e2e8f0; border-radius:10px; padding:10px; background:#f8fafc; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:700; font-size:.83rem; text-align:left; color:#0f172a; }
+.opt:hover { border-color:#16a34a; background:#f0fdf4; }
+.opt.ok { border-color:#16a34a; background:#dcfce7; color:#14532d; }
+.opt.no { border-color:#dc2626; background:#fee2e2; color:#7f1d1d; }
+.fillin { width:100%; border:2px solid #e2e8f0; border-radius:10px; padding:10px 14px; font-family:'Nunito',sans-serif; font-weight:700; font-size:.92rem; background:#f8fafc; outline:none; }
+.fillin:focus { border-color:#0284c7; }
+.fillin.ok { border-color:#16a34a; background:#dcfce7; }
+.fillin.no { border-color:#dc2626; background:#fee2e2; }
+.fb { border-radius:9px; padding:9px 12px; margin-top:8px; font-weight:700; font-size:.83rem; }
+.fb.ok { background:#dcfce7; color:#14532d; }
+.fb.no { background:#fee2e2; color:#7f1d1d; }
+.tpb { background:#e2e8f0; border-radius:50px; height:7px; margin-bottom:14px; }
+.tpbf { height:100%; background:linear-gradient(90deg,#16a34a,#0284c7); border-radius:50px; transition:width .3s; }
+.spill { background:linear-gradient(135deg,#16a34a,#0284c7); color:#fff; border-radius:50px; padding:3px 11px; font-size:.74rem; font-weight:800; display:inline-block; margin-bottom:8px; }
+.rring { width:120px; height:120px; border-radius:50%; margin:0 auto 14px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Fredoka One',cursive; color:#fff; }
+.rring.great { background:linear-gradient(135deg,#16a34a,#22c55e); }
+.rring.good { background:linear-gradient(135deg,#0284c7,#7c3aed); }
+.rring.keep { background:linear-gradient(135deg,#d97706,#ea580c); }
+
+/* VOCAB */
+.vcrd { border-radius:16px; padding:24px 18px; text-align:center; margin-bottom:12px; background:linear-gradient(135deg,#f0fdf4,#ecfdf5); border:2px solid #86efac; }
+.vw { font-family:'Fredoka One',cursive; font-size:2.1rem; color:#14532d; margin-bottom:5px; }
+.vpos { background:#16a34a; color:#fff; border-radius:50px; padding:2px 10px; font-size:.73rem; font-weight:800; display:inline-block; margin-bottom:9px; }
+.vdef { color:#166534; font-size:.9rem; font-weight:600; line-height:1.5; margin-bottom:6px; }
+.vex { color:#15803d; font-size:.83rem; font-style:italic; }
+.vtheme { background:#dcfce7; border-radius:7px; padding:3px 9px; font-size:.7rem; color:#16a34a; font-weight:700; display:inline-block; margin-bottom:7px; }
+
+/* PASSAGE */
+.psg { background:#f8fafc; border-radius:13px; padding:15px; border:1.5px solid #e2e8f0; line-height:1.7; font-size:.88rem; margin-bottom:12px; }
+.psg em { color:#16a34a; font-style:normal; font-weight:700; }
+.ptitle { font-family:'Fredoka One',cursive; font-size:1rem; color:#16a34a; margin-bottom:7px; }
+
+/* WRITING */
+.wpbox { border-radius:13px; padding:15px; margin-bottom:12px; background:linear-gradient(135deg,#faf5ff,#f3e8ff); border:1.5px solid #d8b4fe; }
+.wpbox p { color:#6d28d9; font-weight:700; font-size:.9rem; }
+.warea { width:100%; min-height:120px; border:2px solid #e2e8f0; border-radius:12px; padding:12px; font-family:'Nunito',sans-serif; font-size:.88rem; line-height:1.6; resize:vertical; background:#fff; outline:none; }
+.warea:focus { border-color:#7c3aed; }
+.wct { font-size:.73rem; color:#64748b; font-weight:700; text-align:right; margin-top:4px; }
+
+/* PHONICS */
+.phcard { background:linear-gradient(135deg,#fffbeb,#fef3c7); border-radius:15px; padding:18px; border:2px solid #fde68a; }
+
+/* CALENDAR */
+.calgrid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.calh { text-align:center; font-size:.64rem; font-weight:800; color:#64748b; padding:3px 0; }
+.cald { aspect-ratio:1; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:.68rem; font-weight:700; background:#f8fafc; color:#64748b; border:1.5px solid #e2e8f0; position:relative; }
+.cald.ct { border-color:#16a34a; color:#16a34a; background:#f0fdf4; }
+.cald.cd { background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; border-color:transparent; }
+.cald.cb { background:linear-gradient(135deg,#d97706,#ea580c); color:#fff; border-color:transparent; }
+.cald.cf { opacity:.3; }
+.cald .bs { position:absolute; top:-4px; right:-4px; font-size:.65rem; }
+
+/* SKILL BARS */
+.sbw { margin-bottom:11px; }
+.sbl { display:flex; justify-content:space-between; margin-bottom:4px; font-size:.82rem; font-weight:700; }
+.sbtr { background:#e2e8f0; border-radius:50px; height:9px; }
+.sbfi { height:100%; border-radius:50px; transition:width .8s; }
+
+/* ACHIEVEMENTS */
+.achi { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; border:1.5px solid; margin-bottom:7px; }
+.achi.ul { background:#f0fdf4; border-color:#86efac; }
+.achi.lk { background:#f8fafc; border-color:#e2e8f0; opacity:.5; }
+
+/* PRIZE */
+.pzitem { border-radius:14px; padding:14px; margin-bottom:9px; border:2px solid; }
+
+/* MOVE */
+.modebtns { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.modebtn { border:none; cursor:pointer; border-radius:16px; padding:20px 14px; color:#fff; display:flex; flex-direction:column; align-items:center; gap:7px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.95rem; }
+.modebtn span { font-size:2.2rem; }
+.modebtn small { font-size:.73rem; opacity:.85; font-weight:600; }
+
+/* MOVE TIMER */
+.mring { position:relative; width:130px; height:130px; margin:0 auto 12px; }
+.mring svg { transform:rotate(-90deg); }
+.mring .mtrk { fill:none; stroke:#e2e8f0; stroke-width:10; }
+.mring .mfil { fill:none; stroke:#16a34a; stroke-width:10; stroke-linecap:round; stroke-dasharray:327; stroke-dashoffset:0; transition:stroke-dashoffset .5s, stroke .3s; }
+.mctr { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.mnum { font-family:'Fredoka One',cursive; font-size:2.4rem; line-height:1; }
+
+/* FOCUS MODE */
+.focus { position:fixed; inset:0; background:#fff; z-index:200; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:24px; }
+.focus.on { display:flex; }
+.fring { width:90px; height:90px; border-radius:50%; border:4px solid #bbf7d0; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; animation:breathe 4s infinite; }
+@keyframes breathe { 0%,100%{transform:scale(1);border-color:#bbf7d0} 50%{transform:scale(1.1);border-color:#16a34a} }
+.ftimer { font-family:'Fredoka One',cursive; font-size:3.2rem; color:#0f172a; }
+.fquote { font-style:italic; font-weight:700; color:#64748b; font-size:.9rem; line-height:1.5; max-width:320px; margin:14px auto 20px; }
+
+/* OVERLAYS */
+.ov { position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:100; }
+.ov.on { display:flex; }
+.ovbox { border-radius:24px; padding:32px 24px; text-align:center; max-width:320px; width:90%; }
+.bonus-box { background:linear-gradient(135deg,#78350f,#f59e0b); color:#fff; }
+.prize-box { background:#fffbeb; border:3px solid #f59e0b; }
+
+/* WA BOX */
+.wabox { background:linear-gradient(135deg,#f0fdf4,#dcfce7); border-radius:14px; padding:16px; border:2px solid #86efac; margin-top:12px; }
+.wamsg { background:#fff; border-radius:10px; padding:12px; font-size:.82rem; line-height:1.6; color:#0f172a; border:1px solid #bbf7d0; margin:9px 0; white-space:pre-line; font-weight:600; }
+
+/* HISTORY */
+.hitem { background:#f8fafc; border-radius:12px; padding:12px 14px; border:1.5px solid #e2e8f0; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
+
+.hidden { display:none !important; }
+.mt { margin-top:12px; }
+.center { text-align:center; }
+.phr { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.bkbtn { border:none; background:#f1f5f9; border-radius:50%; width:32px; height:32px; cursor:pointer; font-size:.95rem; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; }
+
+@keyframes pop { 0%{transform:scale(.3);opacity:0} 100%{transform:scale(1);opacity:1} }
+.pop { animation:pop .4s cubic-bezier(.175,.885,.32,1.275); }
+</style>
+</head>
+<body>
+
+<!-- BONUS OVERLAY -->
+<div class="ov" id="bonusOv">
+  <div class="ovbox bonus-box pop">
+    <div style="font-size:3rem">🎾⭐🏎️</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:1.8rem;margin:10px 0">¡ACE! BONUS!</h2>
+    <p style="font-weight:700;font-size:.95rem;margin:5px 0">¡Más de 40 minutos hoy!</p>
+    <p style="font-size:.83rem;opacity:.9" id="bonusQuote"></p>
+    <br>
+    <button class="btn btn-g" onclick="closeBonus()">¡Sí, campeón! 🚀</button>
+  </div>
+</div>
+
+<!-- PRIZE OVERLAY -->
+<div class="ov" id="prizeOv">
+  <div class="ovbox prize-box pop">
+    <div style="font-size:4rem">🏆</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:1.6rem;color:#d97706;margin:10px 0">¡MISIÓN CUMPLIDA!</h2>
+    <p style="font-weight:700;font-size:.95rem;color:#92400e">¡David llegó a Grade 5! 🎾🏎️</p>
+    <br>
+    <button class="btn btn-o" onclick="document.getElementById('prizeOv').classList.remove('on')">¡Lo logré! 🌟</button>
+  </div>
+</div>
+
+<!-- FOCUS MODE -->
+<div class="focus" id="focusMode">
+  <div style="font-size:3.5rem;margin-bottom:12px">🎾</div>
+  <div style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#16a34a;margin-bottom:16px">Focus Mode</div>
+  <div class="fring"><span style="font-size:1.3rem">🧘</span></div>
+  <div class="ftimer" id="fTimer">0:00</div>
+  <div style="font-size:.65rem;color:#64748b;font-weight:700;margin-bottom:4px">de 40 minutos activos</div>
+  <div class="fquote" id="fQuote"></div>
+  <button class="btn btn-m" onclick="exitFocus()">← Volver a la app</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="htitle">🎾 David's English</div>
+    <div class="hsub">Grade 2.6 → Grade 5 · 2 meses · 40 min/día</div>
+  </div>
+  <div class="hbadges">
+    <div class="hbadge">🔥 <span id="hStr">0</span></div>
+    <div class="hbadge">⭐ <span id="hStar">0</span></div>
+    <button onclick="enterFocus()" style="border:none;background:rgba(255,255,255,.25);color:#fff;border-radius:50px;padding:5px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:.78rem;cursor:pointer">🧘 Focus</button>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <button class="on" onclick="go('home')" id="t-home">🏠 Home</button>
+  <button onclick="go('test')" id="t-test">📝 Test</button>
+  <button onclick="go('practice')" id="t-practice">💪 Practicar</button>
+  <button onclick="go('move')" id="t-move">🏃 Move & Learn</button>
+  <button onclick="go('progress')" id="t-progress">📈 Progreso</button>
+  <button onclick="go('prize')" id="t-prize">🏆 Premio</button>
+</nav>
+
+<main>
+
+<!-- ══ HOME ══ -->
+<div class="pg on" id="pg-home">
+
+  <div class="hero">
+    <h2>¡Hola, David! 👋</h2>
+    <p style="color:#374151;margin-top:4px">Meta: <strong>Grade 5 en 2 meses</strong> · 40 min/día<br>¡Como Alcaraz y Max — jóvenes campeones que nunca paran!</p>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext" id="qtext"></div>
+    <div class="qwho" id="qwho"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num green" id="sStr">0</div><div class="stat-lbl">🔥 Racha días</div></div>
+    <div class="stat"><div class="stat-num blue" id="sDone">0</div><div class="stat-lbl">✅ Completados</div></div>
+    <div class="stat"><div class="stat-num gold" id="sBon">0</div><div class="stat-lbl">⭐ Bonus</div></div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h2>Tu Cancha 🎾</h2>
+      <span style="background:#dcfce7;color:#14532d;border-radius:50px;padding:3px 10px;font-size:.7rem;font-weight:800">Meta: Grade 5 🏆</span>
+    </div>
+    <div class="court">
+      <div class="ctrack"><div class="cbar" id="cbar" style="width:5%"></div></div>
+      <div class="clbls"><span>Grade 2.6</span><span id="cpct" style="color:#fff;font-weight:900">5%</span><span>Grade 5 🏆</span></div>
+    </div>
+    <div class="ms" id="msRow"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-bottom:4px">Sesión de hoy ⏱️</h2>
+    <p style="margin-bottom:4px">40 min = día completo · Más de 40 min = ⭐ BONUS</p>
+    <div style="background:#f0fdf4;border-radius:10px;padding:8px 12px;margin-bottom:12px;font-size:.78rem;font-weight:700;color:#16a34a">🧠 El timer solo avanza cuando usas la app activamente</div>
+    <div class="tzone">
+      <div class="tring">
+        <svg viewBox="0 0 130 130" width="140" height="140">
+          <circle class="trk" cx="65" cy="65" r="60"/>
+          <circle class="tfil" id="tarc" cx="65" cy="65" r="60"/>
+        </svg>
+        <div class="tctr">
+          <div class="tnum" id="tDisp">0:00</div>
+          <div class="tsub">de 40 min</div>
+        </div>
+      </div>
+      <div class="tmsg" id="tMsg">Elige una actividad para empezar 🎾</div>
+    </div>
+    <div class="agrid">
+      <button class="abtn a1" onclick="startAct('reading')"><span>📖</span>Lectura</button>
+      <button class="abtn a2" onclick="startAct('writing')"><span>✏️</span>Escritura</button>
+      <button class="abtn a3" onclick="startAct('vocab')"><span>📚</span>Vocabulario</button>
+      <button class="abtn a4" onclick="startAct('phonics')"><span>🔤</span>Fonética</button>
+    </div>
+    <div class="mt center" id="stopRow" style="display:none">
+      <button class="btn btn-g" onclick="stopSess()">✅ ¡Marcar día completado!</button>
+    </div>
+    <div class="mt center hidden" id="doneMsg">
+      <span style="font-weight:800;color:#16a34a;font-size:1rem">🎾 ¡Día completado, campeón!</span>
+    </div>
+  </div>
+
+  <div id="waBox" style="display:none">
+    <div class="wabox">
+      <h2 style="font-size:.95rem;color:#16a34a;margin-bottom:3px">📱 Resumen para mamá</h2>
+      <p style="font-size:.78rem;color:#64748b;margin-bottom:5px">Copia y envía por WhatsApp</p>
+      <div class="wamsg" id="waMsg"></div>
+      <button class="btn btn-g" onclick="copyWA()" style="font-size:.82rem;padding:9px 18px" id="copyBtn">📋 Copiar mensaje</button>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:#fde68a;background:#fffbeb">
+    <h2 style="font-size:.92rem;color:#d97706">💡 Tip del día</h2>
+    <p id="tipEl" style="color:#92400e;margin-top:4px"></p>
+  </div>
+
+</div>
+
+<!-- ══ TEST ══ -->
+<div class="pg" id="pg-test">
+  <div id="tIntro">
+    <div class="card" style="text-align:center;padding:26px 14px">
+      <div style="font-size:3rem;margin-bottom:8px">📝</div>
+      <h2 style="font-family:'Fredoka One',cursive;font-size:1.6rem">Test Diagnóstico</h2>
+      <p style="color:#64748b;margin:7px auto;max-width:380px">Mide tu nivel en Reading, Writing y Comprensión según los estándares de California Grade 4-5.</p>
+      <p style="color:#0284c7;font-weight:700;margin-bottom:14px">⏱️ ~20 min · 20 preguntas</p>
+      <div id="tHistPreview" style="margin-bottom:14px"></div>
+      <button class="btn btn-g" onclick="startTest()">¡Comenzar! 🚀</button>
+    </div>
+  </div>
+
+  <div id="tArea" class="hidden">
+    <div class="card" style="padding:12px 16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div class="spill" id="tSec">📖 Reading</div>
+        <span style="font-weight:800;color:#64748b;font-size:.8rem" id="tCnt">1/20</span>
+      </div>
+      <div class="tpb"><div class="tpbf" id="tPBar" style="width:0%"></div></div>
+    </div>
+    <div id="qCont"></div>
+    <div class="btnrow">
+      <button class="btn btn-b hidden" id="checkBtn" onclick="checkAns()">Verificar ✓</button>
+      <button class="btn btn-g hidden" id="nextBtn" onclick="nextQ()">Siguiente →</button>
+    </div>
+  </div>
+
+  <div id="tRes" class="hidden">
+    <div class="card" style="text-align:center;padding:22px 14px">
+      <div class="rring" id="rring"><span style="font-size:2.1rem" id="rPct">0%</span><span style="font-size:.75rem;font-family:'Nunito';font-weight:700">Total</span></div>
+      <h2 style="font-family:'Fredoka One',cursive;font-size:1.4rem" id="rTitle">¡Bien hecho!</h2>
+      <p style="color:#64748b;margin:6px 0 12px" id="rMsg"></p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+        <div style="background:#f8fafc;border-radius:11px;padding:11px;text-align:center;border:1.5px solid #e2e8f0"><div style="font-size:1.3rem">📖</div><div style="font-size:.68rem;font-weight:800;color:#64748b;margin:3px 0">Reading</div><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#16a34a" id="srR">-</div></div>
+        <div style="background:#f8fafc;border-radius:11px;padding:11px;text-align:center;border:1.5px solid #e2e8f0"><div style="font-size:1.3rem">✏️</div><div style="font-size:.68rem;font-weight:800;color:#64748b;margin:3px 0">Writing</div><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#7c3aed" id="srW">-</div></div>
+        <div style="background:#f8fafc;border-radius:11px;padding:11px;text-align:center;border:1.5px solid #e2e8f0"><div style="font-size:1.3rem">🧠</div><div style="font-size:.68rem;font-weight:800;color:#64748b;margin:3px 0">Comprensión</div><div style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:#0284c7" id="srC">-</div></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn btn-g" onclick="go('practice')">¡A practicar! 💪</button>
+        <button class="btn btn-m" onclick="resetTest()">Repetir 🔄</button>
+      </div>
+    </div>
+    <div class="card hidden" id="tHistCard">
+      <h2 style="margin-bottom:12px">📊 Historial de tests</h2>
+      <div id="tHistList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRACTICE ══ -->
+<div class="pg" id="pg-practice">
+  <div id="pmenu">
+    <div class="card" style="background:linear-gradient(135deg,#f0fdf4,#eff6ff);border-color:#bbf7d0;margin-bottom:14px">
+      <h2 style="color:#16a34a">¿Qué practicamos hoy? 💪</h2>
+      <p>¡Mezcla actividades como Alcaraz mezcla golpes en la cancha!</p>
+    </div>
+    <div style="display:grid;gap:10px">
+      <button onclick="openP('vocab')" style="border:none;cursor:pointer;border-radius:14px;background:linear-gradient(135deg,#16a34a,#22c55e);padding:15px;display:flex;align-items:center;gap:12px;color:#fff;font-family:'Nunito',sans-serif">
+        <span style="font-size:1.9rem">📚</span><div style="text-align:left"><div style="font-family:'Fredoka One',cursive;font-size:1rem">Vocabulario Temático</div><div style="font-size:.75rem;opacity:.85">Tenis · Dog Man · Wings of Fire · TMNT</div></div>
+      </button>
+      <button onclick="openP('reading')" style="border:none;cursor:pointer;border-radius:14px;background:linear-gradient(135deg,#0284c7,#7c3aed);padding:15px;display:flex;align-items:center;gap:12px;color:#fff;font-family:'Nunito',sans-serif">
+        <span style="font-size:1.9rem">📖</span><div style="text-align:left"><div style="font-family:'Fredoka One',cursive;font-size:1rem">Lectura Guiada</div><div style="font-size:.75rem;opacity:.85">Textos con preguntas de comprensión</div></div>
+      </button>
+      <button onclick="openP('writing')" style="border:none;cursor:pointer;border-radius:14px;background:linear-gradient(135deg,#7c3aed,#db2777);padding:15px;display:flex;align-items:center;gap:12px;color:#fff;font-family:'Nunito',sans-serif">
+        <span style="font-size:1.9rem">✏️</span><div style="text-align:left"><div style="font-family:'Fredoka One',cursive;font-size:1rem">Escritura Creativa</div><div style="font-size:.75rem;opacity:.85">Párrafos, comparaciones, narrativas</div></div>
+      </button>
+      <button onclick="openP('phonics')" style="border:none;cursor:pointer;border-radius:14px;background:linear-gradient(135deg,#d97706,#ea580c);padding:15px;display:flex;align-items:center;gap:12px;color:#fff;font-family:'Nunito',sans-serif">
+        <span style="font-size:1.9rem">🔤</span><div style="text-align:left"><div style="font-family:'Fredoka One',cursive;font-size:1rem">Fonética & Raíces</div><div style="font-size:.75rem;opacity:.85">Syllable patterns, Latin suffixes, root words</div></div>
+      </button>
+    </div>
+  </div>
+  <div id="p-vocab" class="hidden"><div class="phr"><button class="bkbtn" onclick="backP()">←</button><h2 style="font-family:'Fredoka One',cursive">📚 Vocabulario</h2></div><div id="vcEl"></div><div class="btnrow"><button class="btn btn-o" onclick="nxtV()">Siguiente →</button></div><div class="center mt" style="color:#64748b;font-size:.78rem" id="vCtr"></div></div>
+  <div id="p-reading" class="hidden"><div class="phr"><button class="bkbtn" onclick="backP()">←</button><h2 style="font-family:'Fredoka One',cursive">📖 Lectura</h2></div><div id="rdEl"></div></div>
+  <div id="p-writing" class="hidden"><div class="phr"><button class="bkbtn" onclick="backP()">←</button><h2 style="font-family:'Fredoka One',cursive">✏️ Escritura</h2></div><div id="wrEl"></div></div>
+  <div id="p-phonics" class="hidden"><div class="phr"><button class="bkbtn" onclick="backP()">←</button><h2 style="font-family:'Fredoka One',cursive">🔤 Fonética</h2></div><div id="phEl"></div></div>
+</div>
+
+<!-- ══ MOVE & LEARN ══ -->
+<div class="pg" id="pg-move">
+  <div id="mmenu">
+    <div class="card" style="text-align:center;padding:22px 16px;background:linear-gradient(135deg,#f0fdf4,#eff6ff);border-color:#bbf7d0;margin-bottom:14px">
+      <div style="font-size:2.5rem;margin-bottom:8px">🏃💡</div>
+      <h2 style="font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:5px">Move & Learn</h2>
+      <p>Tu cuerpo en movimiento = inglés en tu cerebro.<br>¡Como Alcaraz y Max entrenan cuerpo y mente!</p>
+    </div>
+    <p style="font-weight:800;color:#64748b;font-size:.83rem;margin-bottom:9px;text-align:center">¿Dónde estás ahora?</p>
+    <div class="modebtns">
+      <button class="modebtn" style="background:linear-gradient(135deg,#16a34a,#22c55e)" onclick="setMode('home')">
+        <span>🏠</span>Modo Casa<small>Ejercicio físico completo</small>
+      </button>
+      <button class="modebtn" style="background:linear-gradient(135deg,#0284c7,#7c3aed)" onclick="setMode('car')">
+        <span>🚗</span>Modo Carro<small>Movimiento en el asiento</small>
+      </button>
+    </div>
+    <div class="card" style="border-color:#bbf7d0">
+      <h2 style="font-size:1.05rem;margin-bottom:12px">📈 Mi progreso físico</h2>
+      <div id="ftLog"></div>
+      <div id="ftEmpty" style="text-align:center;color:#64748b;font-size:.85rem;padding:12px">¡Aún no hay registros. Empieza hoy! 💪</div>
+    </div>
+  </div>
+
+  <div id="msess" class="hidden">
+    <div id="mbadge" style="text-align:center;margin-bottom:12px"></div>
+    <div id="mword" style="border-radius:16px;padding:22px 18px;text-align:center;margin-bottom:12px;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:2px solid #86efac">
+      <div id="mwTheme" style="background:#dcfce7;border-radius:7px;padding:3px 9px;font-size:.7rem;color:#16a34a;font-weight:700;display:inline-block;margin-bottom:7px"></div>
+      <div id="mwWord" style="font-family:'Fredoka One',cursive;font-size:2.1rem;color:#14532d;margin-bottom:5px"></div>
+      <div id="mwPos" style="background:#16a34a;color:#fff;border-radius:50px;padding:2px 10px;font-size:.72rem;font-weight:800;display:inline-block;margin-bottom:8px"></div>
+      <div id="mwDef" style="color:#166534;font-size:.88rem;font-weight:600;line-height:1.5;margin-bottom:6px"></div>
+      <div id="mwEx" style="color:#15803d;font-size:.82rem;font-style:italic"></div>
+      <div style="margin-top:12px">
+        <button onclick="speak(mWords[mIdx].w, mWords[mIdx].def, mWords[mIdx].ex)" style="border:none;background:#16a34a;color:#fff;border-radius:50px;padding:8px 18px;font-family:Nunito,sans-serif;font-weight:800;font-size:.85rem;cursor:pointer">🔊 Escuchar de nuevo</button>
+      </div>
+    </div>
+
+    <div id="mexcard" style="border-radius:16px;padding:20px;text-align:center;border:2px solid #e2e8f0;margin-bottom:12px">
+      <div id="mxIcon" style="font-size:3.5rem;margin-bottom:7px"></div>
+      <div id="mxName" style="font-family:'Fredoka One',cursive;font-size:1.4rem;margin-bottom:5px"></div>
+      <div id="mxInstr" style="color:#64748b;font-size:.85rem;font-weight:700;margin-bottom:14px"></div>
+      <div class="mring">
+        <svg viewBox="0 0 120 120" width="130" height="130">
+          <circle class="mtrk" cx="60" cy="60" r="52"/>
+          <circle class="mfil" id="marc" cx="60" cy="60" r="52"/>
+        </svg>
+        <div class="mctr">
+          <div class="mnum" id="mCnt">60</div>
+          <div style="font-size:.62rem;color:#64748b;font-weight:700">seg</div>
+        </div>
+      </div>
+      <div id="mStat" style="font-weight:800;font-size:.9rem;color:#16a34a;margin-bottom:12px">¡Lee la palabra y empieza!</div>
+      <div id="mStartRow"><button class="btn btn-g" onclick="startMTimer()" style="font-size:.95rem;padding:13px 28px">¡Empezar! 🏃</button></div>
+      <div id="mRepsRow" class="hidden" style="margin-top:4px">
+        <p style="font-weight:800;font-size:.95rem;margin-bottom:4px" id="repsQ">¿Cuántas lograste? 💪</p>
+        <p style="font-size:.8rem;color:#64748b;font-weight:700;margin-bottom:10px" id="repsUnit"></p>
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px">
+          <button onclick="chReps(-1)" style="border:none;background:#f1f5f9;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer;font-weight:800">−</button>
+          <div id="repsN" style="font-family:'Fredoka One',cursive;font-size:2.8rem;color:#16a34a;min-width:70px;text-align:center">0</div>
+          <button onclick="chReps(1)" style="border:none;background:#f1f5f9;border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer;font-weight:800">+</button>
+        </div>
+        <button class="btn btn-g" onclick="saveReps()" style="width:100%;justify-content:center">¡Guardar! ✅</button>
+      </div>
+    </div>
+
+    <div id="mquiz" class="hidden">
+      <div class="card" style="border-color:#bae6fd;background:#f0f9ff">
+        <h2 style="font-size:.95rem;margin-bottom:10px">🧠 ¿Lo memorizaste?</h2>
+        <div id="mqQ" style="font-weight:700;font-size:.9rem;margin-bottom:10px"></div>
+        <div id="mqOpts" style="display:grid;gap:6px"></div>
+        <div id="mqFb" style="display:none;border-radius:8px;padding:8px 12px;margin-top:8px;font-weight:700;font-size:.82rem"></div>
+      </div>
+      <div class="btnrow hidden" id="mqNext">
+        <button class="btn btn-g" onclick="nxtMW()">Siguiente 🏃</button>
+        <button class="btn btn-m" onclick="endMove()">Terminar</button>
+      </div>
+    </div>
+    <div class="mt center"><button class="btn btn-m" onclick="endMove()" style="font-size:.8rem;padding:8px 16px">← Salir</button></div>
+  </div>
+</div>
+
+<!-- ══ PROGRESS ══ -->
+<div class="pg" id="pg-progress">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2>Calendario 📅</h2><span style="background:#dcfce7;color:#14532d;border-radius:50px;padding:3px 9px;font-size:.7rem;font-weight:800" id="calLbl"></span>
+    </div>
+    <div class="calgrid" id="calGrid"></div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-top:10px;font-size:.7rem;font-weight:700">
+      <span><span style="display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,#16a34a,#22c55e);border-radius:3px;vertical-align:middle"></span> Completo</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,#d97706,#ea580c);border-radius:3px;vertical-align:middle"></span> ⭐ Bonus</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border:2px solid #16a34a;border-radius:3px;vertical-align:middle;background:#f0fdf4"></span> Hoy</span>
+    </div>
+  </div>
+  <div class="card"><h2 style="margin-bottom:12px">Habilidades 🎯</h2><div id="skBars"></div></div>
+  <div class="card" style="border-color:#fde68a"><h2 style="margin-bottom:10px">Logros 🏅</h2><div id="achList"></div></div>
+</div>
+
+<!-- ══ PRIZE ══ -->
+<div class="pg" id="pg-prize">
+  <div class="card" style="text-align:center;padding:24px 16px">
+    <div style="font-size:3rem;margin-bottom:7px" id="pzIco">🎾</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:1.5rem;margin-bottom:5px">Tu Premio Final 🏆</h2>
+    <p id="pzSt" style="color:#64748b;margin-bottom:14px">Completa el plan para desbloquear</p>
+    <div style="background:#e2e8f0;border-radius:50px;height:16px;max-width:280px;margin:0 auto 9px">
+      <div id="pzBar" style="height:100%;border-radius:50px;background:linear-gradient(90deg,#d97706,#ea580c);width:5%;transition:width 1s"></div>
+    </div>
+    <p style="font-size:.78rem;font-weight:700;color:#d97706" id="pzPct">5% completado</p>
+  </div>
+  <div class="card" style="border-color:#fde68a"><h2 style="color:#d97706;font-size:1rem;margin-bottom:12px">🏆 ¿Qué puedes ganar?</h2><div id="pzList"></div></div>
+  <div class="card" style="border-color:#bae6fd"><h2 style="color:#0284c7;font-size:.95rem;margin-bottom:10px">🎯 Hitos del camino</h2><div id="hitoList"></div></div>
+</div>
+
+</main>
+
+<script>
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+var S = {
+  stars:0, streak:0, days:[], bonus:[],
+  testHistory:[], scores:{reading:0,writing:0,comprehension:0},
+  progress:5, sessionOn:false, activeSecs:0,
+  fitnessLog:[], prizeShown:false
+};
+
+function save() {
+  try { localStorage.setItem('dav5', JSON.stringify(S)); } catch(e) {}
+}
+function load() {
+  try { var d = localStorage.getItem('dav5'); if(d) { var p = JSON.parse(d); for(var k in p) S[k] = p[k]; } } catch(e) {}
+}
+
+// ════════════════════════════════════════
+// QUOTES & TIPS
+// ════════════════════════════════════════
+var QUOTES = [
+  {q:"Every day is a new opportunity to improve yourself.", w:"Carlos Alcaraz", s:"🎾 Tenis"},
+  {q:"I always try to enjoy what I do. That's the most important thing.", w:"Carlos Alcaraz", s:"🎾 Tenis"},
+  {q:"You have to fight for every point, every game. Never give up.", w:"Rafael Nadal", s:"🎾 Tenis"},
+  {q:"What makes you a champion is what you do when nobody is watching.", w:"Rafael Nadal", s:"🎾 Tenis"},
+  {q:"There is no pressure when you are making a dream come true.", w:"Roger Federer", s:"🎾 Tenis"},
+  {q:"The mind is the most important muscle. Train it every day.", w:"Novak Djokovic", s:"🎾 Tenis"},
+  {q:"I really think a champion is defined not by their wins, but by how they recover from losses.", w:"Serena Williams", s:"🎾 Tenis"},
+  {q:"Winning is about heart, not just legs. It's got to be in the right place.", w:"Max Verstappen", s:"🏎️ F1"},
+  {q:"When you stop improving, you start going backwards. Always push forward.", w:"Max Verstappen", s:"🏎️ F1"},
+  {q:"I don't look at what others are doing. I focus on what I can control.", w:"Max Verstappen", s:"🏎️ F1"},
+  {q:"And so you touch this limit, something happens and you can go a little bit further.", w:"Ayrton Senna", s:"🏎️ F1"},
+  {q:"Still I rise. I always come back stronger.", w:"Lewis Hamilton", s:"🏎️ F1"},
+  {q:"Every loss teaches you something. Never waste a defeat.", w:"Lewis Hamilton", s:"🏎️ F1"},
+  {q:"I never think about the result. I just think about what I need to do each moment.", w:"Fernando Alonso", s:"🏎️ F1"},
+];
+
+var TIPS = [
+  "🎾 Alcaraz practica miles de golpes al día. ¡Tú practica inglés 40 minutos — el resultado es grandeza!",
+  "🏎️ Max dijo: 'When you stop improving, you start going backwards.' ¡Practica hoy!",
+  "🎾 Nadal nunca se rinde. ¡Tú tampoco te rindas con el inglés!",
+  "🏎️ Senna decía que los límites solo existen en la mente. ¡Hoy supera tu límite!",
+  "🎾 Federer perdió antes de ganar. ¡Cada error en inglés es práctica!",
+  "🏎️ Hamilton dijo: 'Still I rise.' ¡Cuando algo sea difícil — Still I rise, David!",
+  "🐉 Wings of Fire tip: 'ancient' = very old. 'The ancient dragon ruled Pyrrhia.'",
+  "🐢 Leonardo leads with discipline. ¡Practica con esa misma disciplina!",
+  "🦸 Dog Man usa CONTEXT CLUES para resolver misterios. ¡Tú también puedes!",
+  "🔤 Root word 'port' = carry: transport, import, export, portable.",
+  "🎾 Djokovic medita todos los días para entrenar su mente. ¡Focus Mode es tu meditación!",
+  "🏎️ Alonso compite con 40+ años porque su mente nunca para de aprender.",
+  "✏️ Great paragraph = Topic sentence + 3 details + Closing sentence.",
+  "🎾 Serena: 'You have to believe in yourself when no one else does.'",
+  "🏎️ Max: 'I don't look at others. I focus on what I can control.' ¡Foco, David!",
+];
+
+// ════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════
+function go(id) {
+  var pages = document.querySelectorAll('.pg');
+  for(var i=0;i<pages.length;i++) pages[i].classList.remove('on');
+  var tabs = document.querySelectorAll('nav button');
+  for(var i=0;i<tabs.length;i++) tabs[i].classList.remove('on');
+  document.getElementById('pg-'+id).classList.add('on');
+  document.getElementById('t-'+id).classList.add('on');
+  if(id==='home') renderHome();
+  if(id==='progress') renderProg();
+  if(id==='prize') renderPrize();
+  if(id==='test') renderTestPrev();
+  if(id==='move') renderFt();
+}
+
+// ════════════════════════════════════════
+// HOME
+// ════════════════════════════════════════
+function renderHome() {
+  document.getElementById('hStr').textContent = S.streak;
+  document.getElementById('hStar').textContent = S.stars;
+  document.getElementById('sStr').textContent = S.streak;
+  document.getElementById('sDone').textContent = S.days.length;
+  document.getElementById('sBon').textContent = S.bonus.length;
+
+  var p = S.progress;
+  document.getElementById('cbar').style.width = Math.max(p,5)+'%';
+  document.getElementById('cpct').textContent = Math.round(p)+'%';
+
+  // Milestones
+  var thresholds = [0,20,40,60,80,100];
+  var labels = ['2.6','3.0','3.5','4.0','4.5','5.0'];
+  var icons = ['✅','📍','3.5','4.0','4.5','🏆'];
+  var html = '';
+  for(var i=0;i<thresholds.length;i++) {
+    var cls = 'mdot';
+    var txt = labels[i];
+    if(p >= thresholds[i] && i > 0) { cls += ' done'; txt = '✅'; }
+    else if(i > 0 && p >= thresholds[i-1] && p < thresholds[i] && cls === 'mdot') { cls += ' now'; txt = '📍'; }
+    html += '<div class="mitem"><div class="'+cls+'">'+txt+'</div><div class="mlbl">'+labels[i]+'</div></div>';
+  }
+  document.getElementById('msRow').innerHTML = html;
+
+  // Quote
+  var q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('qtext').textContent = '"'+q.q+'"';
+  document.getElementById('qwho').textContent = '— '+q.w+' '+q.s;
+
+  // Tip
+  document.getElementById('tipEl').textContent = TIPS[Math.floor(Math.random()*TIPS.length)];
+
+  // Focus timer display
+  updateTimerDisplay();
+
+  // Today status
+  var today = toStr();
+  if(S.days.indexOf(today) >= 0) {
+    document.getElementById('doneMsg').classList.remove('hidden');
+    showWA();
+  } else {
+    document.getElementById('doneMsg').classList.add('hidden');
+  }
+  document.getElementById('stopRow').style.display = S.sessionOn ? 'flex' : 'none';
+}
+
+// ════════════════════════════════════════
+// TIMER (active only)
+// ════════════════════════════════════════
+var lastAct = Date.now();
+var actInt = null;
+var GOAL_SECS = 40 * 60;
+var CIRC = 2 * Math.PI * 60; // 377
+
+document.addEventListener('click', function(){ lastAct = Date.now(); });
+document.addEventListener('keydown', function(){ lastAct = Date.now(); });
+document.addEventListener('touchstart', function(){ lastAct = Date.now(); }, {passive:true});
+document.addEventListener('mousemove', function(){ lastAct = Date.now(); });
+
+function startActTracking() {
+  if(actInt) clearInterval(actInt);
+  actInt = setInterval(function() {
+    if(!S.sessionOn) return;
+    var inactive = (Date.now() - lastAct) > 30000;
+    if(!inactive) {
+      S.activeSecs = (S.activeSecs || 0) + 1;
+      updateTimerDisplay();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  var secs = S.activeSecs || 0;
+  var m = Math.floor(secs/60);
+  var s = secs % 60;
+  var str = m + ':' + (s < 10 ? '0' : '') + s;
+  document.getElementById('tDisp').textContent = str;
+  document.getElementById('fTimer').textContent = str;
+
+  var frac = Math.min(secs / GOAL_SECS, 1);
+  var offset = CIRC - frac * CIRC;
+  var arc = document.getElementById('tarc');
+  arc.style.strokeDashoffset = offset;
+  arc.style.stroke = frac >= 1 ? '#f59e0b' : frac >= 0.5 ? '#16a34a' : '#0284c7';
+
+  var mins = secs / 60;
+  var msgEl = document.getElementById('tMsg');
+  if(mins >= 40) msgEl.textContent = '🎾 ¡40 min! ¡Sigue para BONUS!';
+  else if(S.sessionOn) msgEl.textContent = '¡Faltan '+Math.ceil(40-mins)+' min! ¡Vamos! 💪';
+  else msgEl.textContent = 'Elige una actividad para empezar 🎾';
+}
+
+function startAct(type) {
+  if(!S.sessionOn) {
+    S.sessionOn = true;
+    if(!S.activeSecs) S.activeSecs = 0;
+    save();
+    startActTracking();
+    document.getElementById('stopRow').style.display = 'flex';
+    lastAct = Date.now();
+  }
+  go('practice');
+  openP(type);
+}
+
+function stopSess() {
+  if(actInt) { clearInterval(actInt); actInt = null; }
+  var today = toStr();
+  if(S.days.indexOf(today) < 0) {
+    S.days.push(today);
+    S.stars += 2;
+    updateStreak();
+    var mins = (S.activeSecs || 0) / 60;
+    if(mins > 40) { S.bonus.push(today); S.stars += 3; showBonus(); }
+    S.progress = Math.min(100, S.progress + (100/60));
+    if(S.progress >= 100 && !S.prizeShown) {
+      S.prizeShown = true;
+      setTimeout(function(){ document.getElementById('prizeOv').classList.add('on'); }, 1500);
+    }
+    S.sessionOn = false;
+    S.activeSecs = 0;
+    save();
+  }
+  document.getElementById('stopRow').style.display = 'none';
+  document.getElementById('doneMsg').classList.remove('hidden');
+  showWA();
+  renderHome();
+}
+
+function updateStreak() {
+  var sorted = S.days.slice().sort();
+  var str = 1;
+  for(var i=sorted.length-1;i>0;i--) {
+    var diff = (new Date(sorted[i]) - new Date(sorted[i-1])) / 86400000;
+    if(diff === 1) str++; else break;
+  }
+  S.streak = str;
+}
+
+// ════════════════════════════════════════
+// BONUS
+// ════════════════════════════════════════
+function showBonus() {
+  var q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('bonusQuote').textContent = '"'+q.q+'" — '+q.w+' '+q.s;
+  document.getElementById('bonusOv').classList.add('on');
+}
+function closeBonus() { document.getElementById('bonusOv').classList.remove('on'); }
+
+// ════════════════════════════════════════
+// WHATSAPP
+// ════════════════════════════════════════
+function showWA() {
+  var p = Math.round(S.progress);
+  var hito = p>=75 ? '🥇 ¡Ya está en Semana 6!' : p>=50 ? '🥈 ¡Llegó al Mes 1!' : p>=25 ? '🏅 ¡Logró la Semana 2!' : '💪 ¡Va muy bien!';
+  var q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  var txt = 'Hola mamá 👋🎾\n\nDavid completó su práctica hoy ✅\n\n📊 Progreso: '+p+'% hacia Grade 5\n🔥 Racha: '+S.streak+' días seguidos\n✅ Días: '+S.days.length+'\n⭐ Bonus: '+S.bonus.length+'\n\n'+hito+'\n\n"'+q.q+'" — '+q.w+' '+q.s+'\n\n¡Sigue así, campeón! 💪';
+  document.getElementById('waMsg').textContent = txt;
+  document.getElementById('waBox').style.display = 'block';
+}
+function copyWA() {
+  var txt = document.getElementById('waMsg').textContent;
+  try {
+    navigator.clipboard.writeText(txt).then(function() {
+      document.getElementById('copyBtn').textContent = '✅ ¡Copiado!';
+      setTimeout(function(){ document.getElementById('copyBtn').textContent = '📋 Copiar mensaje'; }, 2000);
+    });
+  } catch(e) {
+    var ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    document.getElementById('copyBtn').textContent = '✅ ¡Copiado!';
+    setTimeout(function(){ document.getElementById('copyBtn').textContent = '📋 Copiar mensaje'; }, 2000);
+  }
+}
+
+// ════════════════════════════════════════
+// FOCUS MODE
+// ════════════════════════════════════════
+var fqIdx = 0;
+var fqInt = null;
+function enterFocus() {
+  fqIdx = Math.floor(Math.random()*QUOTES.length);
+  var fq = QUOTES[fqIdx];
+  document.getElementById('fQuote').textContent = '"'+fq.q+'" — '+fq.w+' '+fq.s;
+  document.getElementById('focusMode').classList.add('on');
+  if(!fqInt) fqInt = setInterval(function(){
+    fqIdx = (fqIdx+1) % QUOTES.length;
+    var fq2 = QUOTES[fqIdx];
+    var el = document.getElementById('fQuote');
+    if(el) el.textContent = '"'+fq2.q+'" — '+fq2.w+' '+fq2.s;
+  }, 60000);
+}
+function exitFocus() { document.getElementById('focusMode').classList.remove('on'); }
+
+// ════════════════════════════════════════
+// TEST
+// ════════════════════════════════════════
+var QS = [
+  {sec:'📖 Reading',type:'mc',text:'Read: "The exhausted player collapsed on the court after the three-hour match." What does "exhausted" mean?',opts:['Very excited and happy','Completely tired out','Angry and frustrated','Focused and ready'],ans:1,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'Which sentence uses a COMPARATIVE adjective correctly?',opts:['Peyton is more faster than any player.','This serve is more powerful than his last one.','She is most tallest on the team.','He runned more quicker.'],ans:1,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'The root word "struct" means "to build." What does "construction" most likely mean?',opts:['To tear something down','The act of building something','A type of machine','To plan carefully'],ans:1,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'What is the EFFECT in: "Because it rained all week, the tennis tournament was postponed."',opts:['It rained all week','The players were upset','The tournament was postponed','The courts were wet'],ans:2,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'In an informational text, what is the purpose of a SUBHEADING?',opts:['To tell a fictional story','To show what that section is about','To list the author\'s feelings','To give a conclusion'],ans:1,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'What does "empathetic" mean? "David was empathetic toward his opponent who had injured his wrist."',opts:['Understanding and sharing someone else\'s feelings','Being happy someone got hurt','Feeling nervous','Being competitive'],ans:0,sk:'reading'},
+  {sec:'📖 Reading',type:'mc',text:'Which suffix makes a word mean "without"? power_____',opts:['-ful','-tion','-less','-ness'],ans:2,sk:'reading'},
+  {sec:'🧠 Comprensión',type:'passage',passage:'Carlos Alcaraz became the youngest world number one in ATP history. His rise to the top was the result of years of <em>disciplined</em> practice and an incredible mental game. His coach says what makes Alcaraz special is his ability to <em>focus</em> completely on each point, forgetting mistakes and moving forward. To improve at tennis, players must practice consistently. Coaches say the three most important skills are: a reliable serve, strong footwork, and mental toughness. Mental toughness means staying calm and focused even when losing.',text:'What is the MAIN IDEA of this passage?',opts:['Tennis matches can last many hours.','Tennis requires skill, strategy, and mental toughness.','Alcaraz is the best player ever.','Coaches are very important.'],ans:1,sk:'comprehension'},
+  {sec:'🧠 Comprensión',type:'passage',passage:'Carlos Alcaraz became the youngest world number one in ATP history. His rise to the top was the result of years of <em>disciplined</em> practice and an incredible mental game. His coach says what makes Alcaraz special is his ability to <em>focus</em> completely on each point, forgetting mistakes and moving forward. To improve at tennis, players must practice consistently. Coaches say the three most important skills are: a reliable serve, strong footwork, and mental toughness. Mental toughness means staying calm and focused even when losing.',text:'What does "mental toughness" mean?',opts:['Having strong muscles','Practicing every day','Staying calm and focused even when losing','Having a great coach'],ans:2,sk:'comprehension'},
+  {sec:'🧠 Comprensión',type:'passage',passage:'Carlos Alcaraz became the youngest world number one in ATP history. His rise to the top was the result of years of <em>disciplined</em> practice and an incredible mental game. His coach says what makes Alcaraz special is his ability to <em>focus</em> completely on each point, forgetting mistakes and moving forward. To improve at tennis, players must practice consistently. Coaches say the three most important skills are: a reliable serve, strong footwork, and mental toughness. Mental toughness means staying calm and focused even when losing.',text:'What can students learn from Alcaraz\'s approach?',opts:['Only athletes need focus.','Natural talent is enough.','Mental strength and focus can be developed by anyone.','Practice is not important.'],ans:2,sk:'comprehension'},
+  {sec:'🧠 Comprensión',type:'mc',text:'"The dragon first spread her wings, then dove toward the ocean, and finally landed on a distant island." What text structure is this?',opts:['Compare and contrast','Problem and solution','Cause and effect','Sequence / chronological order'],ans:3,sk:'comprehension'},
+  {sec:'🧠 Comprensión',type:'mc',text:'"All schools should have tennis programs because they teach discipline and fitness." This sentence is:',opts:['A fact','The author\'s opinion','A definition','A description'],ans:1,sk:'comprehension'},
+  {sec:'🧠 Comprensión',type:'mc',text:'The BEST way to compare two texts on the same topic is:',opts:['Read only the one you agree with','Look at how each author supports their point with evidence','Count the words','Choose the one with pictures'],ans:1,sk:'comprehension'},
+  {sec:'✏️ Writing',type:'fill',text:'Add the correct suffix to mean "the state of being happy": happy_____',ans:'ness',sk:'writing',hint:'"happiness" = state of being happy'},
+  {sec:'✏️ Writing',type:'mc',text:'Which sentence is punctuated CORRECTLY?',opts:['After practice David ate a banana drank water and rested.','After practice, David ate a banana, drank water, and rested.','After practice David, ate a banana drank water, and rested.','After, practice David ate a banana drank water and rested.'],ans:1,sk:'writing'},
+  {sec:'✏️ Writing',type:'mc',text:'Which is the BEST topic sentence for a paragraph about why reading helps in sports?',opts:['I like to read books.','Reading and sports are activities.','Reading daily improves focus, vocabulary, and strategy — skills that make you a better athlete.','Some athletes read books.'],ans:2,sk:'writing'},
+  {sec:'✏️ Writing',type:'fill',text:'What prefix means "before"? Example: ___view = to see before',ans:'pre',sk:'writing',hint:'preview, prepare, predict...'},
+  {sec:'✏️ Writing',type:'mc',text:'Which word uses the correct Latin suffix (-tion = act of)? "The scientist made an important _____ of a new species."',opts:['discovering','discoveration','discovery','discoveried'],ans:2,sk:'writing'},
+  {sec:'✏️ Writing',type:'mc',text:'How can you IMPROVE: "Dogs are great pets. They are loyal. They are fun. Dogs are friendly."',opts:['Add more short sentences.','Combine sentences and add specific details.','Remove some sentences.','Add a title.'],ans:1,sk:'writing'},
+  {sec:'✏️ Writing',type:'mc',text:'Which sentence uses ANTONYMS correctly?',opts:['The game was long and lengthy.','His serve was powerful but weak.','She felt nervous before but confident after she won.','The team practiced hard and worked diligently.'],ans:2,sk:'writing'},
+];
+
+var curQ=0, tAns=[], tAnswered=false;
+
+function renderTestPrev() {
+  var hist = S.testHistory || [];
+  var el = document.getElementById('tHistPreview');
+  if(hist.length > 0) {
+    var last = hist[hist.length-1];
+    el.innerHTML = '<div style="background:#f0fdf4;border-radius:11px;padding:9px 13px;font-size:.8rem;font-weight:700;color:#16a34a;margin-bottom:10px">📊 Último test: '+last.date+' — Total: '+last.total+'% · Reading: '+last.reading+'% · Writing: '+last.writing+'% · Comprensión: '+last.comprehension+'%</div>';
+  } else {
+    el.innerHTML = '<div style="background:#f0fdf4;border-radius:11px;padding:9px 13px;font-size:.8rem;font-weight:700;color:#16a34a;margin-bottom:10px">🎾 ¡Este es tu primer test!</div>';
+  }
+}
+
+function startTest() {
+  curQ=0; tAns=[]; tAnswered=false;
+  document.getElementById('tIntro').classList.add('hidden');
+  document.getElementById('tArea').classList.remove('hidden');
+  document.getElementById('tRes').classList.add('hidden');
+  renderQ();
+}
+
+function renderQ() {
+  var q = QS[curQ];
+  document.getElementById('tCnt').textContent = (curQ+1)+'/'+QS.length;
+  document.getElementById('tPBar').style.width = ((curQ/QS.length)*100)+'%';
+  document.getElementById('tSec').textContent = q.sec;
+  tAnswered = false;
+
+  var h = '<div class="qbox"><div class="qtxt">'+q.text+'</div>';
+  if(q.type === 'passage') h = '<div class="qbox"><div class="psg">'+q.passage.replace(/\n/g,'<br>')+'</div><div class="qtxt">'+q.text+'</div>';
+  if(q.type !== 'fill') {
+    h += '<div class="opts">';
+    for(var i=0;i<q.opts.length;i++) h += '<button class="opt" id="o'+i+'" onclick="pickOpt('+i+')">'+q.opts[i]+'</button>';
+    h += '</div>';
+  } else {
+    h += '<input class="fillin" id="fin" placeholder="Type your answer..." oninput="document.getElementById(\'checkBtn\').classList.remove(\'hidden\')">';
+    if(q.hint) h += '<div style="font-size:.74rem;color:#64748b;margin-top:4px">💡 '+q.hint+'</div>';
+  }
+  h += '<div id="fb" style="display:none" class="fb"></div></div>';
+  document.getElementById('qCont').innerHTML = h;
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('nextBtn').classList.add('hidden');
+}
+
+function pickOpt(i) {
+  if(tAnswered) return;
+  tAnswered = true;
+  var q = QS[curQ];
+  for(var j=0;j<q.opts.length;j++) {
+    var b = document.getElementById('o'+j);
+    if(j===q.ans) b.classList.add('ok');
+    else if(j===i) b.classList.add('no');
+    b.style.cursor = 'default';
+  }
+  tAns.push({sk:q.sk, ok:i===q.ans});
+  showFb(i===q.ans, q.opts[q.ans]);
+  document.getElementById('nextBtn').classList.remove('hidden');
+}
+
+function checkAns() {
+  if(tAnswered) return;
+  tAnswered = true;
+  var q = QS[curQ];
+  var val = document.getElementById('fin').value.trim().toLowerCase();
+  var ok = val === q.ans.toLowerCase();
+  document.getElementById('fin').classList.add(ok?'ok':'no');
+  tAns.push({sk:q.sk, ok:ok});
+  showFb(ok, q.ans);
+  document.getElementById('nextBtn').classList.remove('hidden');
+  document.getElementById('checkBtn').classList.add('hidden');
+}
+
+function showFb(ok, correct) {
+  var el = document.getElementById('fb');
+  el.style.display = 'block';
+  el.className = 'fb '+(ok?'ok':'no');
+  el.textContent = ok ? '✅ ¡Correcto!' : '❌ Correct: "'+correct+'"';
+}
+
+function nextQ() {
+  curQ++;
+  if(curQ >= QS.length) showRes();
+  else renderQ();
+}
+
+function showRes() {
+  document.getElementById('tArea').classList.add('hidden');
+  document.getElementById('tRes').classList.remove('hidden');
+  var sk = {reading:{c:0,t:0}, writing:{c:0,t:0}, comprehension:{c:0,t:0}};
+  for(var i=0;i<tAns.length;i++) { sk[tAns[i].sk].t++; if(tAns[i].ok) sk[tAns[i].sk].c++; }
+  var pct = function(s){ return s.t ? Math.round(s.c/s.t*100) : 0; };
+  var r=pct(sk.reading), w=pct(sk.writing), c=pct(sk.comprehension), tot=Math.round((r+w+c)/3);
+  document.getElementById('rPct').textContent = tot+'%';
+  document.getElementById('srR').textContent = r+'%';
+  document.getElementById('srW').textContent = w+'%';
+  document.getElementById('srC').textContent = c+'%';
+  var ring = document.getElementById('rring');
+  if(tot>=75){ring.className='rring great';document.getElementById('rTitle').textContent='¡Excelente, David! 🌟';}
+  else if(tot>=50){ring.className='rring good';document.getElementById('rTitle').textContent='¡Muy bien! 💪';}
+  else{ring.className='rring keep';document.getElementById('rTitle').textContent='¡Buen comienzo, campeón! 🎾';}
+  document.getElementById('rMsg').textContent = 'Reading '+r+'% · Writing '+w+'% · Comprensión '+c+'%';
+  var dateLabel = new Date().toLocaleDateString('es-US',{month:'short',day:'numeric',year:'numeric'});
+  if(!S.testHistory) S.testHistory=[];
+  S.testHistory.push({date:dateLabel,reading:r,writing:w,comprehension:c,total:tot});
+  S.testDone=true; S.scores={reading:r,writing:w,comprehension:c};
+  save();
+  renderTestHist();
+}
+
+function renderTestHist() {
+  var hist = S.testHistory||[];
+  if(hist.length===0) return;
+  var card = document.getElementById('tHistCard');
+  card.classList.remove('hidden');
+  var html = '';
+  for(var i=hist.length-1;i>=0;i--) {
+    var h=hist[i], prev=hist[i-1];
+    var trend = i>0 ? (h.total>prev.total?'⬆️':h.total<prev.total?'⬇️':'➡️') : '';
+    var cls = h.total>=75?'great':h.total>=50?'good':'keep';
+    var colors = {great:'#16a34a',good:'#0284c7',keep:'#d97706'};
+    html += '<div class="hitem"><div style="font-family:\'Fredoka One\',cursive;font-size:1.6rem;color:'+colors[cls]+';min-width:55px;text-align:center">'+h.total+'%</div><div style="flex:1"><div style="font-weight:800;font-size:.85rem">'+h.date+' '+trend+'</div><div style="font-size:.72rem;color:#64748b">📖 '+h.reading+'% · ✏️ '+h.writing+'% · 🧠 '+h.comprehension+'%</div></div></div>';
+  }
+  document.getElementById('tHistList').innerHTML = html;
+}
+
+function resetTest() {
+  document.getElementById('tRes').classList.add('hidden');
+  document.getElementById('tIntro').classList.remove('hidden');
+  renderTestPrev();
+}
+
+// ════════════════════════════════════════
+// VOCABULARY
+// ════════════════════════════════════════
+var VOCAB = [
+  {w:'strategy',pos:'noun',def:'A careful plan to achieve a goal or win',ex:'Alcaraz used a strategy of hitting to the backhand corner to win.',th:'🎾 Tennis'},
+  {w:'resilient',pos:'adjective',def:'Able to recover quickly from difficulties',ex:'After losing the first set, Alcaraz stayed resilient and won.',th:'🎾 Tennis'},
+  {w:'consecutive',pos:'adjective',def:'Following one after another without stopping',ex:'David practiced five consecutive days without missing one.',th:'🎾 Tennis'},
+  {w:'empathy',pos:'noun',def:'Understanding and sharing the feelings of others',ex:'Dog Man shows empathy by always helping those in need.',th:'🦸 Dog Man'},
+  {w:'compassion',pos:'noun',def:'Deep care for others who are suffering',ex:'Dog Man\'s compassion makes him a true hero.',th:'🦸 Dog Man'},
+  {w:'villain',pos:'noun',def:'The bad character in a story who causes trouble',ex:'Petey is Dog Man\'s villain but eventually becomes better.',th:'🦸 Dog Man'},
+  {w:'ancient',pos:'adjective',def:'Very old, from a long time ago',ex:'The dragons of Pyrrhia live in ancient caves.',th:'🐉 Wings of Fire'},
+  {w:'alliance',pos:'noun',def:'A group that joins together for a common purpose',ex:'The dragonets formed an alliance to stop the war.',th:'🐉 Wings of Fire'},
+  {w:'perspective',pos:'noun',def:'A point of view or way of seeing things',ex:'Each dragon has a different perspective on the war.',th:'🐉 Wings of Fire'},
+  {w:'legendary',pos:'adjective',def:'Famous and remembered for a very long time',ex:'The Ninja Turtles are legendary heroes of New York.',th:'🐢 TMNT'},
+  {w:'discipline',pos:'noun',def:'Training yourself to work hard consistently',ex:'Master Splinter taught that discipline is the key to becoming a ninja.',th:'🐢 TMNT'},
+  {w:'adversary',pos:'noun',def:'An enemy or opponent you must overcome',ex:'Shredder is the greatest adversary the Turtles have faced.',th:'🐢 TMNT'},
+  {w:'evidence',pos:'noun',def:'Facts that prove something is true',ex:'Good readers use evidence from the text to answer questions.',th:'📚 Skill'},
+  {w:'elaborate',pos:'verb',def:'To add more details to explain something fully',ex:'The teacher asked David to elaborate on his answer.',th:'📚 Skill'},
+  {w:'summarize',pos:'verb',def:'To retell the main ideas in a shorter way',ex:'Can you summarize chapter one of Wings of Fire?',th:'📚 Skill'},
+  {w:'consequence',pos:'noun',def:'The result or effect of an action',ex:'The consequence of daily practice is becoming a champion.',th:'🎾 Tennis'},
+];
+var vi = 0;
+function renderVocab() {
+  var w = VOCAB[vi % VOCAB.length];
+  document.getElementById('vcEl').innerHTML = '<div class="vcrd"><div class="vtheme">'+w.th+'</div><div class="vw">'+w.w+'</div><div class="vpos">'+w.pos+'</div><div class="vdef">📖 '+w.def+'</div><div class="vex">💬 "'+w.ex+'"</div><div style="margin-top:12px"><button onclick="speakWord(VOCAB[vi%VOCAB.length].w, VOCAB[vi%VOCAB.length].def, VOCAB[vi%VOCAB.length].ex)" style="border:none;background:#16a34a;color:#fff;border-radius:50px;padding:8px 18px;font-family:Nunito,sans-serif;font-weight:800;font-size:.85rem;cursor:pointer">🔊 Escuchar de nuevo</button></div></div>';
+  document.getElementById('vCtr').textContent = 'Palabra '+(vi%VOCAB.length+1)+'/'+VOCAB.length;
+  // Auto-speak after short delay
+  var w2 = VOCAB[vi % VOCAB.length];
+  setTimeout(function(){ speak(w2.w, w2.def, w2.ex); }, 400);
+}
+function nxtV() { vi++; renderVocab(); }
+
+// ════════════════════════════════════════
+// READING
+// ════════════════════════════════════════
+var READS = [
+  {title:'🐢 Ninja Turtles and Teamwork',p:'Leonardo, Donatello, Raphael, and Michelangelo are four brothers transformed into ninja warriors. Together, they protect New York City.\n\nEach turtle has a different personality, but their greatest strength is teamwork. Leonardo is the <em>disciplined</em> leader. Donatello is the <em>intelligent</em> inventor. Raphael is the <em>fierce</em> fighter. Michelangelo is the <em>creative</em> jokester. Together, they are nearly unbeatable.',qs:[{t:'What is the MAIN IDEA?',opts:['Turtles like pizza.','Each turtle\'s different strength makes them nearly unbeatable.','Leonardo is the best.','New York has many villains.'],a:1},{t:'What does "disciplined" suggest about Leonardo?',opts:['He is funny.','He follows rules and trains hard.','He is angry.','He works alone.'],a:1},{t:'What text structure does this passage use?',opts:['Chronological','Compare and contrast','Cause and effect','Problem and solution'],a:1}]},
+  {title:'🐉 Wings of Fire: Different Perspectives',p:'In Pyrrhia, seven dragon tribes have been at war for years. A group of five young dragonets was trained to end the war.\n\nHowever, each dragonet has a different <em>perspective</em> on how peace should be achieved. Some want to fight; others want to negotiate. Their differences make the problem harder, but their <em>diversity</em> gives them unique solutions no single tribe could find alone.',qs:[{t:'What problem do the dragonets face?',opts:['They cannot find food.','They disagree on how to achieve peace.','Their cave is too small.','They cannot fight.'],a:1},{t:'What does the author suggest about different perspectives?',opts:['Always causes problems.','Only useful in war.','Can make problems harder but bring unique solutions.','Not important.'],a:2},{t:'What does "diversity" most likely mean?',opts:['A weapon','Having many different backgrounds and viewpoints','A dragon\'s name','A tribe name'],a:1}]},
+  {title:'🎾 Max Verstappen: The Champion\'s Mindset',p:'Max Verstappen became Formula 1 World Champion at just 24 years old. Like Carlos Alcaraz in tennis, Max is known for his incredible <em>focus</em> and ability to stay calm under extreme pressure.\n\nHis father, Jos Verstappen, trained him from a very young age. Max says his success comes from treating every practice session as if it were a race. "I don\'t look at what others are doing," Max explains. "I focus on what I can control." This mental approach — focusing only on your own performance — is something every student and athlete can use.',qs:[{t:'What do Max Verstappen and Carlos Alcaraz have in common?',opts:['They play the same sport.','Both are known for incredible focus and calm under pressure.','Both started racing very young.','Both have the same coach.'],a:1},{t:'What does Max mean by "focus on what I can control"?',opts:['Control other people\'s performance.','Only worry about your own effort and actions.','Control the weather.','Focus on winning at all costs.'],a:1},{t:'What lesson can students take from this passage?',opts:['Only champions can focus.','Treating every practice seriously leads to success.','You need a famous parent to succeed.','Focus only works in sports.'],a:1}]},
+];
+var ri = 0, rAns = [];
+function renderRead() {
+  var r = READS[ri % READS.length];
+  rAns = [];
+  var h = '<div class="psg"><div class="ptitle">'+r.title+'</div>'+r.p.replace(/\n\n/g,'<br><br>')+'</div><div class="card"><h2 style="font-size:.95rem;margin-bottom:12px">Preguntas 🧠</h2>';
+  for(var qi=0;qi<r.qs.length;qi++) {
+    var q = r.qs[qi];
+    h += '<div style="margin-bottom:14px"><div class="qtxt" style="font-size:.88rem">'+(qi+1)+'. '+q.t+'</div><div class="opts">';
+    for(var oi=0;oi<q.opts.length;oi++) h += '<button class="opt" id="ro'+qi+'_'+oi+'" onclick="pickR('+qi+','+oi+','+q.a+')">'+q.opts[oi]+'</button>';
+    h += '</div><div id="rfb'+qi+'" style="display:none" class="fb"></div></div>';
+  }
+  h += '<div class="btnrow"><button class="btn btn-o" onclick="nxtR()">Siguiente lectura →</button></div></div>';
+  document.getElementById('rdEl').innerHTML = h;
+}
+function pickR(qi,oi,a) {
+  if(rAns[qi] !== undefined) return;
+  rAns[qi] = oi;
+  var r = READS[ri % READS.length];
+  for(var j=0;j<r.qs[qi].opts.length;j++) {
+    var b = document.getElementById('ro'+qi+'_'+j);
+    if(j===a) b.classList.add('ok'); else if(j===oi) b.classList.add('no');
+    b.style.cursor = 'default';
+  }
+  var fb = document.getElementById('rfb'+qi);
+  fb.style.display = 'block';
+  fb.className = 'fb '+(oi===a?'ok':'no');
+  fb.textContent = oi===a ? '✅ Correct!' : '❌ Correct: "'+r.qs[qi].opts[a]+'"';
+}
+function nxtR() { ri++; renderRead(); }
+
+// ════════════════════════════════════════
+// WRITING
+// ════════════════════════════════════════
+var PROMPTS = [
+  {p:'🎾 Imagina que eres el coach de Alcaraz. Escribe un párrafo (4-5 oraciones) dándole consejos usando: First, Then, Next, Finally.',min:35},
+  {p:'🐢 Compara a Leonardo y Raphael de TMNT. ¿Similitudes y diferencias? Usa: both, however, while, on the other hand.',min:40},
+  {p:'🐉 Los dragonets tienen diferentes perspectivas. ¿Por qué tener perspectivas diferentes puede ser un problema Y una fortaleza?',min:45},
+  {p:'🦸 Dog Man es compasivo. Escribe sobre un momento en que TÚ mostraste compasión o empatía.',min:40},
+  {p:'🏎️ Max Verstappen dijo: "I don\'t look at what others are doing." Escribe un párrafo explicando qué significa esto para TI y tu inglés.',min:40},
+  {p:'🎾 CAUSA Y EFECTO: ¿Qué pasa si practicas inglés 40 minutos cada día por 2 meses? Da al menos 3 efectos.',min:40},
+];
+var wi = 0;
+function renderWrite() {
+  var wp = PROMPTS[wi % PROMPTS.length];
+  document.getElementById('wrEl').innerHTML = '<div class="wpbox"><p>✏️ '+wp.p+'</p></div><textarea class="warea" id="wta" placeholder="Write your paragraph in English..." oninput="wc('+wp.min+')"></textarea><div class="wct" id="wcd">0 words (goal: '+wp.min+'+)</div><div class="btnrow"><button class="btn btn-g" onclick="subW()">✅ Submit</button><button class="btn btn-o" onclick="nxtW()">Next prompt →</button></div><div id="wfb" style="display:none;margin-top:10px"></div>';
+}
+function wc(min) {
+  var t = document.getElementById('wta').value;
+  var n = t.trim().split(/\s+/).filter(function(w){return w.length>0;}).length;
+  var el = document.getElementById('wcd');
+  el.textContent = n+' words (goal: '+min+'+)';
+  el.style.color = n>=min ? '#16a34a' : '#64748b';
+}
+function subW() {
+  var t = document.getElementById('wta').value.trim();
+  var n = t.split(/\s+/).filter(function(w){return w.length>0;}).length;
+  var fb = document.getElementById('wfb');
+  fb.style.display = 'block';
+  fb.innerHTML = n<15 ? '<div class="fb no" style="display:block">¡Escribe más! Al menos 30 palabras 💪</div>' : '<div class="fb ok" style="display:block">✅ ¡Excelente escritura! '+n+' palabras 🏆</div>';
+}
+function nxtW() { wi++; renderWrite(); }
+
+// ════════════════════════════════════════
+// PHONICS
+// ════════════════════════════════════════
+var PHONICS = [
+  {title:'Syllable Patterns 🔤',items:[{w:'ten·nis',r:'VC/CV: divide between the two n\'s',ex:'tennis → ten-nis (¡como el deporte de Alcaraz!)'},{w:'ro·bot',r:'V/CV: open first syllable = long vowel',ex:'ro-bot (Donatello builds robots!)'},{w:'bas·ket',r:'VC/CV: divide between s and k',ex:'bas-ket'},{w:'drag·on',r:'VC/CV: divide between g and o',ex:'drag-on (like Wings of Fire!)'}]},
+  {title:'Latin Suffixes 📏',items:[{w:'-tion = "the act of"',r:'educate→education · protect→protection',ex:'The protection of dragons is important in Wings of Fire.'},{w:'-ness = "state of being"',r:'happy→happiness · kind→kindness',ex:'Dog Man\'s kindness makes him the best hero.'},{w:'-ful = "full of"',r:'power→powerful · wonder→wonderful',ex:'A powerful serve wins the point — just like Alcaraz!'},{w:'-less = "without"',r:'fear→fearless · end→endless',ex:'The fearless ninja never backed down.'}]},
+  {title:'Root Words 🌱',items:[{w:'"port" = carry',r:'transport, import, export, portable, report',ex:'Shredder tried to transport stolen technology.'},{w:'"dict" = say/speak',r:'predict, dictionary, contradict',ex:'Can you predict what happens to the dragonets?'},{w:'"struct" = build',r:'construct, instruction, structure',ex:'Donatello followed the instruction manual.'},{w:'"vis" = see',r:'vision, visible, invisible, television',ex:'The invisible ninja moved through the shadows.'}]},
+];
+var pi2=0, pw2=0;
+function renderPhon() {
+  var set = PHONICS[pi2 % PHONICS.length];
+  var item = set.items[pw2 % set.items.length];
+  document.getElementById('phEl').innerHTML = '<div class="phcard"><div style="margin-bottom:7px"><span style="background:#fde68a;color:#92400e;border-radius:50px;padding:3px 10px;font-size:.7rem;font-weight:800">'+set.title+'</span></div><div style="text-align:center;padding:12px 0"><div style="font-family:\'Fredoka One\',cursive;font-size:1.9rem;color:#d97706;margin-bottom:6px">'+item.w+'</div><div style="font-size:.88rem;font-weight:700;color:#92400e;margin-bottom:9px">→ '+item.r+'</div><div style="background:rgba(255,255,255,.6);border-radius:9px;padding:10px;border:1px solid #fde68a"><div style="font-size:.73rem;color:#64748b;font-weight:700">💬 Example:</div><div style="color:#78350f;font-style:italic;margin-top:3px;font-size:.83rem">'+item.ex+'</div></div></div></div><div class="btnrow"><button class="btn btn-o" onclick="nxtPW()">Next →</button><button class="btn btn-g" onclick="nxtPS()">Next topic →</button></div><div class="center mt" style="color:#64748b;font-size:.76rem">Ejemplo '+(pw2%set.items.length+1)+'/'+set.items.length+' · Tema '+(pi2%PHONICS.length+1)+'/'+PHONICS.length+'</div>';
+}
+function nxtPW() { pw2++; renderPhon(); }
+function nxtPS() { pi2++; pw2=0; renderPhon(); }
+
+function openP(type) {
+  document.getElementById('pmenu').classList.add('hidden');
+  document.getElementById('p-vocab').classList.add('hidden');
+  document.getElementById('p-reading').classList.add('hidden');
+  document.getElementById('p-writing').classList.add('hidden');
+  document.getElementById('p-phonics').classList.add('hidden');
+  if(type==='vocab'){document.getElementById('p-vocab').classList.remove('hidden');renderVocab();}
+  else if(type==='reading'){document.getElementById('p-reading').classList.remove('hidden');renderRead();}
+  else if(type==='writing'){document.getElementById('p-writing').classList.remove('hidden');renderWrite();}
+  else if(type==='phonics'){document.getElementById('p-phonics').classList.remove('hidden');renderPhon();}
+}
+function backP() {
+  document.getElementById('p-vocab').classList.add('hidden');
+  document.getElementById('p-reading').classList.add('hidden');
+  document.getElementById('p-writing').classList.add('hidden');
+  document.getElementById('p-phonics').classList.add('hidden');
+  document.getElementById('pmenu').classList.remove('hidden');
+}
+
+// ════════════════════════════════════════
+// MOVE & LEARN
+// ════════════════════════════════════════
+var HOME_EX = [
+  {icon:'🪢',name:'Saltar la cuerda',instr:'¡Salta por 1 minuto mientras repites la palabra en voz alta!',bg:'#f0fdf4',bc:'#86efac',q:'¿Cuántos saltos lograste?',unit:'saltos'},
+  {icon:'💪',name:'Lagartijas',instr:'¡Haz lagartijas por 1 minuto repitiendo la definición!',bg:'#eff6ff',bc:'#bfdbfe',q:'¿Cuántas lagartijas lograste?',unit:'lagartijas'},
+  {icon:'🏋️',name:'Plancha',instr:'¡Mantén la plancha 1 minuto! Repite la palabra cuando quieras parar.',bg:'#faf5ff',bc:'#d8b4fe',q:'¿Cuántos segundos aguantaste la plancha?',unit:'segundos'},
+  {icon:'🦵',name:'Abdominales',instr:'¡Abdominales por 1 minuto! Di la palabra en cada subida.',bg:'#fff7ed',bc:'#fed7aa',q:'¿Cuántos abdominales lograste?',unit:'abdominales'},
+  {icon:'🎾',name:'Shadow Tennis',instr:'¡Practica golpes como Alcaraz por 1 minuto! Repite la palabra en cada swing.',bg:'#f0fdf4',bc:'#86efac',q:'¿Cuántos golpes lograste?',unit:'golpes'},
+  {icon:'🏃',name:'Jumping Jacks',instr:'¡Jumping Jacks por 1 minuto! Grita la palabra en cada salto.',bg:'#fefce8',bc:'#fde047',q:'¿Cuántos Jumping Jacks lograste?',unit:'jumping jacks'},
+];
+var CAR_EX = [
+  {icon:'🖐️',name:'Tap Rhythm',instr:'Golpea el ritmo de las sílabas en tu pierna. Repite 10 veces.',bg:'#eff6ff',bc:'#bfdbfe',q:'¿Cuántas veces repetiste la palabra?',unit:'repeticiones'},
+  {icon:'🎾',name:'Air Tennis',instr:'Mueve el brazo como Alcaraz cada vez que repites. ¡10 golpes!',bg:'#f0fdf4',bc:'#86efac',q:'¿Cuántos golpes de aire hiciste?',unit:'golpes'},
+  {icon:'🤫',name:'Whisper Challenge',instr:'Repite la palabra muy bajo 5 veces, luego más fuerte 5 veces.',bg:'#faf5ff',bc:'#d8b4fe',q:'¿Cuántas veces repetiste la palabra?',unit:'repeticiones'},
+  {icon:'✋',name:'Finger Spelling',instr:'Deletrea en los dedos, una letra por dedo. ¡1 minuto!',bg:'#fff7ed',bc:'#fed7aa',q:'¿Cuántas veces deletreaste la palabra?',unit:'veces'},
+  {icon:'🧘',name:'Breath & Repeat',instr:'Inhala profundo, exhala diciendo la palabra lento. 10 veces.',bg:'#fefce8',bc:'#fde047',q:'¿Cuántas respiraciones completaste?',unit:'respiraciones'},
+  {icon:'👀',name:'Visualiza',instr:'Cierra los ojos. Imagina a Alcaraz usando esta palabra. 10 veces.',bg:'#fdf2f8',bc:'#f0abfc',q:'¿Cuántas veces visualizaste la palabra?',unit:'veces'},
+];
+var MVOCAB = [
+  {w:'resilient',pos:'adjective',def:'Able to recover quickly from difficulties',ex:'Alcaraz stayed resilient and won the match.',th:'🎾',quiz:{q:'What does "resilient" mean?',opts:['Very tired','Able to recover quickly','Very powerful','Very tall'],a:1}},
+  {w:'discipline',pos:'noun',def:'Training yourself to work hard consistently',ex:'Master Splinter taught that discipline is the key.',th:'🐢',quiz:{q:'"Discipline" in a sentence:',opts:['The discipline ran fast.','His discipline to practice made him a champion.','She disciplined the book.','Discipline is a color.'],a:1}},
+  {w:'empathy',pos:'noun',def:'Understanding and sharing someone else\'s feelings',ex:'Dog Man shows empathy by always helping.',th:'🦸',quiz:{q:'You show empathy when you:',opts:['Win a game','Understand how someone else feels','Run fast','Read a book'],a:1}},
+  {w:'strategy',pos:'noun',def:'A careful plan to achieve a goal',ex:'Alcaraz used a strategy to win the final set.',th:'🎾',quiz:{q:'A "strategy" is:',opts:['A sport','A careful plan to achieve a goal','A strong muscle','A type of book'],a:1}},
+  {w:'ancient',pos:'adjective',def:'Very old, from a long time ago',ex:'The dragons of Pyrrhia live in ancient caves.',th:'🐉',quiz:{q:'"Ancient" means:',opts:['Very new','Very fast','Very old','Very big'],a:2}},
+  {w:'legendary',pos:'adjective',def:'Famous and remembered for a long time',ex:'The Ninja Turtles are legendary heroes.',th:'🐢',quiz:{q:'"Legendary" means:',opts:['Unknown','Famous and remembered for a long time','Very recent','Very boring'],a:1}},
+  {w:'consequence',pos:'noun',def:'The result or effect of an action',ex:'The consequence of daily practice is becoming a champion.',th:'🎾',quiz:{q:'What is a "consequence"?',opts:['An exercise','The result of an action','A new word','A type of serve'],a:1}},
+  {w:'compassion',pos:'noun',def:'Deep care for others who are suffering',ex:'Dog Man\'s compassion makes him help everyone.',th:'🦸',quiz:{q:'You show "compassion" when you:',opts:['Win a match','Run fast','Care deeply for someone suffering','Read a long book'],a:2}},
+  {w:'evidence',pos:'noun',def:'Facts that prove something is true',ex:'Good readers use evidence from the text.',th:'📚',quiz:{q:'"Evidence" in reading means:',opts:['Your opinion','Facts that prove your answer','A type of paragraph','The title'],a:1}},
+  {w:'perspective',pos:'noun',def:'A point of view or way of seeing things',ex:'Each dragon has a different perspective on the war.',th:'🐉',quiz:{q:'A "perspective" is:',opts:['A weapon','A point of view','A dragon\'s name','A cave'],a:1}},
+];
+
+var mMode='home', mWords=[], mIdx=0, mExIdx=0, mReps=0, mInt=null, mSecs=60, mLog=[];
+
+function setMode(mode) {
+  mMode = mode;
+  mWords = MVOCAB.slice().sort(function(){return Math.random()-.5;});
+  mIdx = 0; mLog = [];
+  document.getElementById('mmenu').classList.add('hidden');
+  document.getElementById('msess').classList.remove('hidden');
+  var badge = document.getElementById('mbadge');
+  badge.innerHTML = mode==='home' ? '<span style="background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-radius:50px;padding:5px 16px;font-weight:800;font-size:.83rem;display:inline-block">🏠 Modo Casa</span>' : '<span style="background:linear-gradient(135deg,#0284c7,#7c3aed);color:#fff;border-radius:50px;padding:5px 16px;font-weight:800;font-size:.83rem;display:inline-block">🚗 Modo Carro</span>';
+  loadMW();
+}
+
+function loadMW() {
+  if(mIdx >= mWords.length) { endMove(); return; }
+  var w = mWords[mIdx];
+  var exList = mMode==='home' ? HOME_EX : CAR_EX;
+  mExIdx = Math.floor(Math.random()*exList.length);
+  var ex = exList[mExIdx];
+
+  document.getElementById('mwTheme').textContent = w.th;
+  document.getElementById('mwWord').textContent = w.w;
+  document.getElementById('mwPos').textContent = w.pos;
+  document.getElementById('mwDef').textContent = '📖 '+w.def;
+  document.getElementById('mwEx').textContent = '💬 "'+w.ex+'"';
+  // Auto-speak
+  setTimeout(function(){ speak(w.w, w.def, w.ex); }, 400);
+
+  var card = document.getElementById('mexcard');
+  card.style.background = ex.bg;
+  card.style.borderColor = ex.bc;
+  document.getElementById('mxIcon').textContent = ex.icon;
+  document.getElementById('mxName').textContent = ex.name;
+  document.getElementById('mxInstr').textContent = ex.instr;
+  document.getElementById('repsQ').textContent = ex.q || '¿Cuántas lograste? 💪';
+  document.getElementById('repsUnit').textContent = ex.unit ? '(Registra en '+ex.unit+')' : '';
+
+  mSecs = 60; mReps = 0;
+  document.getElementById('mCnt').textContent = '60';
+  document.getElementById('marc').style.strokeDashoffset = '0';
+  document.getElementById('marc').style.stroke = '#16a34a';
+  document.getElementById('mStat').textContent = '¡Lee la palabra y empieza!';
+  document.getElementById('repsN').textContent = '0';
+  document.getElementById('mStartRow').classList.remove('hidden');
+  document.getElementById('mRepsRow').classList.add('hidden');
+  document.getElementById('mquiz').classList.add('hidden');
+  document.getElementById('mqNext').classList.add('hidden');
+  var mqfb = document.getElementById('mqFb');
+  mqfb.style.display = 'none';
+}
+
+function startMTimer() {
+  document.getElementById('mStartRow').classList.add('hidden');
+  document.getElementById('mStat').textContent = '¡Muévete y repite la palabra! 💪';
+  mSecs = 60;
+  var total = 327;
+  if(mInt) clearInterval(mInt);
+  mInt = setInterval(function() {
+    mSecs--;
+    document.getElementById('mCnt').textContent = mSecs;
+    var frac = mSecs/60;
+    document.getElementById('marc').style.strokeDashoffset = total - frac*total;
+    document.getElementById('marc').style.stroke = mSecs<=10?'#ea580c':mSecs<=30?'#d97706':'#16a34a';
+    if(mSecs <= 0) {
+      clearInterval(mInt);
+      document.getElementById('mStat').textContent = '¡Tiempo! ¿Cuántas lograste? 🎉';
+      document.getElementById('mRepsRow').classList.remove('hidden');
+    }
+  }, 1000);
+}
+
+function chReps(d) { mReps = Math.max(0, mReps+d); document.getElementById('repsN').textContent = mReps; }
+
+function saveReps() {
+  var w = mWords[mIdx];
+  var exList = mMode==='home' ? HOME_EX : CAR_EX;
+  var ex = exList[mExIdx];
+  var entry = {date:toStr(), dateLabel:new Date().toLocaleDateString('es-US',{month:'short',day:'numeric'}), word:w.w, exercise:ex.name, icon:ex.icon, reps:mReps, mode:mMode};
+  mLog.push(entry);
+  if(!S.fitnessLog) S.fitnessLog=[];
+  S.fitnessLog.push(entry);
+  if(S.fitnessLog.length>100) S.fitnessLog=S.fitnessLog.slice(-100);
+  save();
+  document.getElementById('mRepsRow').classList.add('hidden');
+  showMQ();
+}
+
+function showMQ() {
+  var w = mWords[mIdx];
+  document.getElementById('mquiz').classList.remove('hidden');
+  document.getElementById('mqQ').textContent = w.quiz.q;
+  var html = '';
+  for(var i=0;i<w.quiz.opts.length;i++) html += '<button class="opt" id="mqo'+i+'" onclick="pickMQ('+i+','+w.quiz.a+')">'+w.quiz.opts[i]+'</button>';
+  document.getElementById('mqOpts').innerHTML = html;
+}
+
+function pickMQ(i, a) {
+  var btns = document.querySelectorAll('#mqOpts .opt');
+  for(var j=0;j<btns.length;j++) {
+    if(j===a) btns[j].classList.add('ok');
+    else if(j===i) btns[j].classList.add('no');
+    btns[j].style.cursor='default';
+  }
+  var w = mWords[mIdx];
+  var fb = document.getElementById('mqFb');
+  fb.style.display = 'block';
+  fb.className = i===a ? 'fb ok' : 'fb no';
+  fb.textContent = i===a ? '✅ ¡Lo memorizaste! ¡Excelente!' : '❌ Correct: "'+w.quiz.opts[a]+'"';
+  document.getElementById('mqNext').classList.remove('hidden');
+}
+
+function nxtMW() { mIdx++; loadMW(); }
+
+function endMove() {
+  if(mInt) { clearInterval(mInt); mInt=null; }
+  document.getElementById('msess').classList.add('hidden');
+  document.getElementById('mmenu').classList.remove('hidden');
+  renderFt();
+}
+
+function renderFt() {
+  var log = S.fitnessLog || [];
+  var empty = document.getElementById('ftEmpty');
+  var ftLog = document.getElementById('ftLog');
+  if(log.length===0) { empty.style.display='block'; ftLog.innerHTML=''; return; }
+  empty.style.display='none';
+
+  var byDate = {};
+  for(var i=0;i<log.length;i++) {
+    var e=log[i];
+    if(!byDate[e.date]) byDate[e.date]=[];
+    byDate[e.date].push(e);
+  }
+  var dates = Object.keys(byDate).sort().reverse().slice(0,14);
+  var html = '';
+  for(var d=0;d<dates.length;d++) {
+    var dt=dates[d], entries=byDate[dt];
+    var totalReps=0; for(var k=0;k<entries.length;k++) totalReps+=entries[k].reps||0;
+    var words=entries.map(function(e){return e.word;}).join(', ');
+    var mIco=entries[0].mode==='home'?'🏠':'🚗';
+    var chips='';
+    for(var k=0;k<entries.length;k++) chips+='<span style="background:#dcfce7;color:#14532d;border-radius:50px;padding:2px 9px;font-size:.7rem;font-weight:800">'+entries[k].icon+' '+entries[k].exercise+': '+entries[k].reps+'</span> ';
+    html+='<div style="background:#f8fafc;border-radius:12px;padding:13px;border:1.5px solid #e2e8f0;margin-bottom:9px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px"><div style="font-weight:800;font-size:.87rem">'+mIco+' '+entries[0].dateLabel+'</div><div style="font-family:\'Fredoka One\',cursive;font-size:1.3rem;color:#16a34a">'+totalReps+' reps</div></div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px">'+chips+'</div><div style="font-size:.72rem;color:#64748b">📚 Palabras: <em>'+words+'</em></div></div>';
+  }
+
+  // Personal bests
+  var bests={};
+  for(var i=0;i<log.length;i++){var e=log[i];if(!bests[e.exercise]||e.reps>bests[e.exercise])bests[e.exercise]=e.reps;}
+  var bestHtml='';
+  for(var ex in bests) bestHtml+='<div style="display:flex;justify-content:space-between;font-size:.83rem;font-weight:700;padding:4px 0;border-bottom:1px solid #f1f5f9"><span>'+ex+'</span><span style="color:#d97706">🏆 '+bests[ex]+' reps</span></div>';
+  if(bestHtml) html+='<div class="card" style="border-color:#fde68a;background:#fffbeb;margin-top:4px"><h2 style="font-size:.92rem;color:#d97706;margin-bottom:8px">🏆 Récords personales</h2>'+bestHtml+'</div>';
+
+  ftLog.innerHTML = html;
+}
+
+// ════════════════════════════════════════
+// PROGRESS
+// ════════════════════════════════════════
+function renderProg() { renderCal(); renderSk(); renderAch(); }
+
+function renderCal() {
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), today=now.getDate();
+  var MN=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  document.getElementById('calLbl').textContent = MN[m]+' '+y;
+  var first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate();
+  var DN=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var h=''; for(var d=0;d<7;d++) h+='<div class="calh">'+DN[d]+'</div>';
+  for(var i=0;i<first;i++) h+='<div></div>';
+  for(var d=1;d<=days;d++) {
+    var ds=dStr(y,m,d),isT=d===today,isDone=S.days.indexOf(ds)>=0,isB=S.bonus.indexOf(ds)>=0,isF=d>today;
+    var cls='cald';
+    if(isT) cls+=' ct';
+    if(isDone&&isB) cls+=' cb'; else if(isDone) cls+=' cd';
+    if(isF) cls+=' cf';
+    h+='<div class="'+cls+'">'+d+(isB?'<span class="bs">⭐</span>':'')+'</div>';
+  }
+  document.getElementById('calGrid').innerHTML = h;
+}
+
+function renderSk() {
+  var sk=[
+    {n:'📖 Reading',c:'#16a34a',s:S.scores.reading||18},
+    {n:'✏️ Writing',c:'#7c3aed',s:S.scores.writing||22},
+    {n:'🧠 Comprensión',c:'#0284c7',s:S.scores.comprehension||20},
+    {n:'📚 Vocabulario',c:'#d97706',s:Math.min(100,15+S.days.length*4)},
+    {n:'🔤 Fonética',c:'#db2777',s:Math.min(100,12+S.days.length*3)},
+    {n:'🏃 Fitness',c:'#16a34a',s:Math.min(100,5+(S.fitnessLog||[]).length*5)},
+  ];
+  var h='';
+  for(var i=0;i<sk.length;i++) {
+    var s=sk[i];
+    h+='<div class="sbw"><div class="sbl"><span>'+s.n+'</span><span style="color:'+s.c+';font-weight:800">'+Math.round(s.s)+'%</span></div><div class="sbtr"><div class="sbfi" style="width:'+s.s+'%;background:'+s.c+'"></div></div></div>';
+  }
+  document.getElementById('skBars').innerHTML = h;
+}
+
+var ACHS=[
+  {i:'🎾',n:'¡Primera sesión!',d:'Completed your first practice',ok:function(){return S.days.length>=1;}},
+  {i:'🔥',n:'3-Day Streak',d:'Practiced 3 consecutive days',ok:function(){return S.streak>=3;}},
+  {i:'⭐',n:'ACE! Bonus Star',d:'Practiced more than 40 minutes',ok:function(){return S.bonus.length>=1;}},
+  {i:'📝',n:'Test Warrior',d:'Completed the diagnostic test',ok:function(){return S.testDone;}},
+  {i:'🔥',n:'7-Day Streak',d:'7 consecutive days',ok:function(){return S.streak>=7;}},
+  {i:'🐢',n:'Ninja Apprentice',d:'14 days of practice',ok:function(){return S.days.length>=14;}},
+  {i:'🐉',n:'Dragon Scholar',d:'30 days of practice',ok:function(){return S.days.length>=30;}},
+  {i:'🏎️',n:'Max Mode',d:'50 days of practice',ok:function(){return S.days.length>=50;}},
+  {i:'💪',n:'Fitness Star',d:'10 Move & Learn sessions',ok:function(){return (S.fitnessLog||[]).length>=10;}},
+  {i:'🏆',n:'¡Grade 5 Champion!',d:'100% — ¡lo lograste!',ok:function(){return S.progress>=100;}},
+];
+
+function renderAch() {
+  var h='';
+  for(var i=0;i<ACHS.length;i++) {
+    var a=ACHS[i], u=a.ok();
+    h+='<div class="achi '+(u?'ul':'lk')+'"><div style="font-size:1.5rem;opacity:'+(u?1:.3)+'">'+a.i+'</div><div><div style="font-weight:800;font-size:.85rem;color:'+(u?'#16a34a':'#64748b')+'">'+a.n+'</div><div style="font-size:.7rem;color:#64748b">'+a.d+'</div></div><div style="margin-left:auto">'+(u?'<span style="color:#16a34a">✅</span>':'<span style="color:#e2e8f0">🔒</span>')+'</div></div>';
+  }
+  document.getElementById('achList').innerHTML = h;
+}
+
+// ════════════════════════════════════════
+// PRIZE
+// ════════════════════════════════════════
+var PRIZES=[
+  {i:'📚',n:'¡Libro nuevo de tu serie favorita!',d:'Dog Man, Wings of Fire o TMNT',pct:25,tag:'Semana 2',tc:'#d97706'},
+  {i:'📺',n:'30 minutos extra de TV por 1 semana',d:'¡Tiempo extra de pantalla!',pct:50,tag:'Mes 1',tc:'#0284c7'},
+  {i:'🍽️',n:'¡Tú escoge el restaurante!',d:'Chipotle · In-N-Out · Chick-fil-A · Panda Express',pct:75,tag:'Semana 6',tc:'#7c3aed'},
+  {i:'🏆',n:'¡Premio especial hasta $30!',d:'¡Tú negocias con mamá! 🎾',pct:100,tag:'¡Meta final!',tc:'#d97706'},
+];
+var HITOS=[
+  {pct:25,i:'📚',n:'Bronce — Semana 2',d:'14 días · Vocabulario dominado',r:'📖 Libro nuevo de tu serie favorita'},
+  {pct:50,i:'📺',n:'Plata — Mes 1',d:'30 días · Reading & Comprensión sólidos',r:'📺 30 min extra de TV por 1 semana'},
+  {pct:75,i:'🍽️',n:'Oro — Semana 6',d:'45 días · Writing & Fonética dominados',r:'🍽️ Tú escoges el restaurante'},
+  {pct:100,i:'🏆',n:'¡CAMPEÓN — 2 meses!',d:'60 días · Grade 5 alcanzado',r:'🏆 Premio especial hasta $30'},
+];
+
+function renderPrize() {
+  var p=S.progress;
+  document.getElementById('pzBar').style.width=Math.max(p,5)+'%';
+  document.getElementById('pzPct').textContent=Math.round(p)+'% completado';
+  document.getElementById('pzSt').textContent=p>=100?'🏆 ¡LO LOGRASTE!':'Faltan '+Math.round(100-p)+'% 💪';
+  document.getElementById('pzIco').textContent=p>=100?'🏆':'🎾';
+
+  var h='';
+  for(var i=0;i<PRIZES.length;i++){
+    var pr=PRIZES[i],lk=p<pr.pct,pt=Math.min(Math.round(p/pr.pct*100),100);
+    h+='<div style="background:'+(lk?'#f8fafc':'#fffbeb')+';border:2px solid '+(lk?'#e2e8f0':pr.tc)+';border-radius:14px;padding:14px;margin-bottom:9px;'+(lk?'opacity:.55':'')+'"><div style="display:flex;align-items:center;gap:10px;margin-bottom:9px"><span style="font-size:2rem">'+pr.i+'</span><div style="flex:1"><div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><span style="background:'+pr.tc+';color:#fff;border-radius:50px;padding:1px 9px;font-size:.66rem;font-weight:800">'+pr.tag+'</span>'+(lk?'':'<span style="font-size:.75rem;color:#16a34a;font-weight:800">✅ ¡Ganado!</span>')+'</div><div style="font-weight:800;font-size:.9rem;color:'+(lk?'#64748b':pr.tc)+'">'+pr.n+'</div><div style="font-size:.73rem;color:#64748b;margin-top:2px">'+pr.d+'</div></div><div style="font-size:1.5rem">'+(lk?'🔒':'🎁')+'</div></div><div style="background:#e2e8f0;border-radius:50px;height:5px"><div style="height:100%;border-radius:50px;background:'+pr.tc+';width:'+pt+'%;transition:width 1s"></div></div><div style="font-size:.68rem;color:#64748b;font-weight:700;margin-top:3px">'+pt+'% del camino</div></div>';
+  }
+  document.getElementById('pzList').innerHTML=h;
+
+  var h2='';
+  for(var i=0;i<HITOS.length;i++){
+    var hi=HITOS[i],dn=p>=hi.pct;
+    h2+='<div style="display:flex;align-items:center;gap:9px;padding:11px;border-radius:11px;background:'+(dn?'#f0fdf4':'#f8fafc')+';border:1.5px solid '+(dn?'#86efac':'#e2e8f0')+';margin-bottom:7px"><span style="font-size:1.5rem;opacity:'+(dn?1:.3)+'">'+hi.i+'</span><div style="flex:1"><div style="font-weight:800;font-size:.83rem;color:'+(dn?'#16a34a':'#64748b')+'">'+hi.n+'</div><div style="font-size:.7rem;color:#64748b">'+hi.d+'</div><div style="font-size:.7rem;color:'+(dn?'#d97706':'#e2e8f0')+';font-weight:800;margin-top:2px">🎁 '+hi.r+'</div></div><div>'+(dn?'<span style="color:#16a34a">✅</span>':'<span style="color:#e2e8f0">🔒</span>')+'</div></div>';
+  }
+  document.getElementById('hitoList').innerHTML=h2;
+}
+
+// ════════════════════════════════════════
+// SPEECH
+// ════════════════════════════════════════
+function speak(word, def, ex) {
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var texts = [word, def, ex];
+  var idx = 0;
+  function sayNext() {
+    if(idx >= texts.length) return;
+    var utt = new SpeechSynthesisUtterance(texts[idx]);
+    utt.lang = 'en-US';
+    utt.rate = 0.85;
+    utt.pitch = 1;
+    utt.onend = function() { idx++; setTimeout(sayNext, 500); };
+    window.speechSynthesis.speak(utt);
+  }
+  sayNext();
+}
+
+function speakWord(word, def, ex) { speak(word, def, ex); }
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function toStr() { var n=new Date(); return dStr(n.getFullYear(),n.getMonth(),n.getDate()); }
+function dStr(y,m,d) { return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+load();
+renderHome();
+if(S.sessionOn && S.activeSecs > 0) {
+  startActTracking();
+  document.getElementById('stopRow').style.display = 'flex';
+}
+if(S.days.indexOf(toStr()) >= 0) {
+  showWA();
+  document.getElementById('doneMsg').classList.remove('hidden');
+}
+</script>
+</body>
+</html>
